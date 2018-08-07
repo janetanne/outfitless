@@ -10,6 +10,7 @@ def connect_to_db(app, db_name):
 
 connect_to_db(app, 'outfitless_db')
 
+# NEED TO FIGURE OUT OAUTH FOR USER
 class User(db.Model):
     """User."""
 
@@ -23,6 +24,7 @@ class User(db.Model):
                       unique=True)
     password = db.Column(db.String(25), nullable=False)
 
+# NEED TO FIGURE OUT GOOGLE PHOTOS ALBUM CONNECTION
 class Closet(db.Model):
     """Closet. A user can have multiple closets."""
 
@@ -37,6 +39,7 @@ class Closet(db.Model):
     user = db.relationship('User', backref="closets")
     closet_name = db.Column(db.String(50), nullable=False)
 
+# NEED TO FIGURE OUT CLARIFAI API CONNECTION
 class Piece(db.Model):
     """Piece of clothing. A closet has multiple pieces."""
 
@@ -121,8 +124,6 @@ class ActivityPiece(db.Model):
 
     piece = db.relationship('Piece', backref="activitypieces")
     activity = db.relationship('Activity', backref="activitypieces")
-
-
 
 
 db_create_all()
