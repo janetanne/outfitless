@@ -70,6 +70,35 @@ def oauth2callback():
 
     return redirect('/')
 
+@app.route('/revoke')
+def revoke():
+    if 'credentials' not in session:
+        return ('You need to <a href="/authorize">authorize</a> before '
+                + 'testing the code to revoke credentials.')
+
+    credentials = google.oauth2.credentials.Credentials(
+                  **session['credentials'])
+
+    revoke = requests.post('https://accounts.google.com/o/oauth2/revoke',
+                            params={'token': credentials.token},
+                            headers = {'content-type': 'application/x-www-form-urlencoded'})
+
+    status_code = getattr(revoke, 'status_code')
+    if status_code == 200:
+        return('Credentials successfully revoked.')
+
+    else:
+        return('An error occurred.')
+
+
+@app.route('/clear')
+def clear_credentials():
+    
+    if 'credentials' in session:
+        del session['credentials']
+    
+    return ('Credentials have been cleared.<br><br>')
+
 def credentials_to_dict(credentials):
 
     return {'token': credentials.token,
