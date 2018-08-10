@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Outfitless • {% block title %}TITLE GOES HERE{% endblock %}</title>
+    </head>
+    <body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+        <h1>Outfitless</h1>
+        {% block content %}CONTENT GOES HERE{% endblock %}
+    </body>
+</html>

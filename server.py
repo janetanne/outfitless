@@ -5,6 +5,8 @@ import os
 import server
 import unittest
 import requests
+
+# for google oauth
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -14,11 +16,15 @@ SCOPES = ['https://www.googleapis.com/auth/photoslibrary.readonly']
 API_SERVICE_NAME = 'library'
 API_VERSION = 'v1'
 
+# for Oufitless app
 app = Flask(__name__)
 app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
-app.secret_key = "JUSTABUNCHAGIBBERISH"
+app.secret_key = os.environ['APP_SECRET_KEY']
+
+# for uploads in Outfitless app
+
 
 @app.route('/')
 def shows_homepage():
