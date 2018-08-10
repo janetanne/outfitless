@@ -53,6 +53,7 @@ class Piece(db.Model):
     closet_id = db.Column(db.Integer, db.ForeignKey('closet.closet_id'),
                           nullable=False)
     closet = db.relationship('Closet', backref="pieces")
+    # possibly add activities here
 
 
 class Outfit(db.Model):

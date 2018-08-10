@@ -1,4 +1,5 @@
 from flask import Flask, redirect, request, render_template, session, url_for, flash, send_from_directory
+from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 import os
@@ -24,7 +25,7 @@ app.jinja_env.auto_reload = True
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 # for uploads in Outfitless app
-UPLOAD_FOLDER = './user_uploads'
+UPLOAD_FOLDER = './test_uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'tiff'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -121,34 +122,34 @@ def credentials_to_dict(credentials):
 # for uploads in Outfitless #
 
 def allowed_file(filename):
+
+    # TODO: this only checks the file extension, not the actual type of file
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        # print("This is request.files: {}".format(request.files))
 
         # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+        if 'images' not in request.files:
+            flash('You forgot to attach a file, try again.')
             return redirect(request.url)
 
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
+        file = request.files.getlist('images')
+        # print("\n\n\nthis is file: {}".format(file))
 
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+        for f in file:
+            if f and allowed_file(f.filename):
+                filename = secure_filename(f.filename)
+                f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                flash('Your photo has been uploaded!')
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('Your photo(s) have been uploaded!')
-
-            # if i want to go to the file url:
-            # return redirect(url_for('uploaded_file',
-                                    # filename=filename))
+            else:
+                flash('This is not a valid file, please use' + 
+                    ' .png/.jpg/.jpeg/.tiff files only.')
 
     return render_template('upload.html')
 
