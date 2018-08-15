@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, render_template, session, url_for, flash, send_from_directory
+from flask import Flask, redirect, request, render_template, session, url_for, flash, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
@@ -6,6 +6,11 @@ import os
 import server
 import unittest
 import requests
+import glob
+
+from clarifai.rest import ClarifaiApp
+from clarifai.rest import Image as ClImage
+c_app = ClarifaiApp()
 
 # for google oauth
 import google.oauth2.credentials
@@ -25,7 +30,7 @@ app.jinja_env.auto_reload = True
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 # for uploads in Outfitless app
-UPLOAD_FOLDER = './test_uploads'
+UPLOAD_FOLDER = './test_uploads' # TODO: remember to change this at production
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'tiff'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -127,11 +132,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # print("This is request.files: {}".format(request.files))
 
         # check if the post request has the file part
         if 'images' not in request.files:
@@ -139,7 +142,6 @@ def upload_file():
             return redirect(request.url)
 
         file = request.files.getlist('images')
-        # print("\n\n\nthis is file: {}".format(file))
 
         for f in file:
             if f and allowed_file(f.filename):
@@ -157,6 +159,40 @@ def upload_file():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
+
+# for batch uploads to Clarifai #
+
+@app.route('/upload.json')
+def process_image():
+    """Sends image/dataset to Clarifai, returns a json of Clarifai results for this batch."""
+    index = 0
+    counter = 0
+    batch_size = 32
+    user_files = glob.glob('./test_uploads/*')
+
+    total_files = len(user_files)
+
+    while (counter < total_files):
+        print("Processing batch " + str(index+1))
+
+        imageList = []
+
+        for x in range(counter, counter + batch_size - 1):
+            try:
+                # import pdb; pdb.set_trace()
+                imageList.append(ClImage(filename=user_files[x]))
+            except IndexError:
+                break
+
+        c_app.inputs.bulk_create_images(imageList)
+
+        model = c_app.models.get('apparel')
+
+        counter = counter + batch_size
+        index = index + 1
+
+    return jsonify(model.predict(imageList))
+
 
 if __name__ == '__main__':
     # When running locally, disable OAuthlib's HTTPs verification.
