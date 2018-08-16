@@ -164,7 +164,7 @@ def uploaded_file(filename):
 
 @app.route('/upload.json')
 def process_image():
-    """Sends image/dataset to Clarifai, returns a json of Clarifai results for this batch."""
+    """Sends image/dataset to Clarifai, returns JSON of Clarifai results for this batch."""
     index = 0
     counter = 0
     batch_size = 32
