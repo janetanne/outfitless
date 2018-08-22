@@ -1,21 +1,27 @@
-import requests
+import requests_oauthlib
+from config import Auth, Config, DevConfig, ProdConfig, config
 
-image_batch = requests.get('http://localhost:5000/upload.json')
+def get_google_auth(state=None, token=None):
+    """Helper function to create OAuth2Session object."""
 
-batch = image_batch.json()
+    if token:
+        return requests_oauthlib.OAuth2Session(Auth.CLIENT_ID, token=token)
+
+    if state:
+        return requests_oauthlib.OAuth2Session(Auth.CLIENT_ID,
+                             state=state,
+                             redirect_uri=Auth.REDIRECT_URI)
+
+    oauth = requests_oauthlib.OAuth2Session(Auth.CLIENT_ID,
+                          redirect_uri=Auth.REDIRECT_URI,
+                          scope=Auth.SCOPES)
+    return oauth
 
 # to get the first three concepts in the JSON:
 
-# first_concept = batch['outputs'][0]['data']['concepts'][0]['name']
-
-# second_concept = batch['outputs'][0]['data']['concepts'][1]['name']
-
-# third_concept = batch['outputs'][0]['data']['concepts'][2]['name']
-
-# print("HARDCODED PULLS: {}, {}, {}".format(first_concept, second_concept, third_concept))
-
 def get_concepts(_dict):
-    """gets first three concepts for each item in batch upload"""
+    """Takes in dictionary (or JSON) and returns a list with 
+    the first three concepts for an item."""
     counter = 0
     list_of_concepts = []
 
@@ -26,6 +32,35 @@ def get_concepts(_dict):
 
     return list_of_concepts
 
+# for item in batch['outputs']:
+#     return("FUNCTION PULLS: {}".format(get_concepts(item))
 
-for item in batch['outputs']:
-    print("FUNCTION PULLS: {}".format(get_concepts(item)))
+def process_image():
+    """Sends image/dataset to Clarifai, returns JSON of Clarifai results for this batch."""
+    index = 0
+    counter = 0
+    batch_size = 32
+    user_files = glob.glob('./test_uploads/*')
+
+    total_files = len(user_files)
+
+    while (counter < total_files):
+        print("Processing batch " + str(index+1))
+
+        imageList = []
+
+        for x in range(counter, counter + batch_size - 1):
+            try:
+                # import pdb; pdb.set_trace()
+                imageList.append(ClImage(filename=user_files[x]))
+            except IndexError:
+                break
+
+        c_app.inputs.bulk_create_images(imageList)
+
+        model = c_app.models.get('apparel')
+
+        counter = counter + batch_size
+        index = index + 1
+
+    return jsonify(model.predict(imageList))

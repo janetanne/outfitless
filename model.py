@@ -1,16 +1,9 @@
+from flask_sqlalchemy import SQLAlchemy
+
 db = SQLAlchemy()
 
-def connect_to_db(app, db_name):
-    """Connect to database."""
+# DATA MODEL DEFINITIONS
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///' + db_name
-    app.config['SQLALCHEMY_ECHO'] = True
-    db.app = app
-    db.init_app(app)
-
-connect_to_db(app, 'outfitless_db')
-
-# NEED TO FIGURE OUT OAUTH FOR USER
 class User(db.Model):
     """User."""
 
@@ -20,11 +13,19 @@ class User(db.Model):
                         primary_key=True,
                         autoincrement=True, 
                         nullable=False)
-    email = db.Column(db.String(50), nullable=False,
+    email = db.Column(db.String(100), nullable=False,
                       unique=True)
-    password = db.Column(db.String(25), nullable=False)
+    name = db.Column(db.String(100), 
+                     nullable=False)
+    tokens = db.Column(db.Text, nullable=False)
+    avatar = db.Column(db.String(200))
 
-# NEED TO FIGURE OUT GOOGLE PHOTOS ALBUM CONNECTION
+    def __repr__(self):
+        """Provides helpful info when printed."""
+
+        return "<User user_id={} email={}>".format(
+                self.user_id, self.email)
+
 class Closet(db.Model):
     """Closet. A user can have multiple closets."""
 
@@ -36,10 +37,16 @@ class Closet(db.Model):
                         nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'),
                         nullable=False)
+
     user = db.relationship('User', backref="closets")
     closet_name = db.Column(db.String(50), nullable=False)
 
-# NEED TO FIGURE OUT CLARIFAI API CONNECTION
+    def __repr__(self):
+        """Provides helpful info when printed."""
+
+        return "<Closet closet_id={} closet_name={}>".format(
+            self.closet_id, self.closet_name)
+
 class Piece(db.Model):
     """Piece of clothing. A closet has multiple pieces."""
 
@@ -52,9 +59,27 @@ class Piece(db.Model):
     times_worn = db.Column(db.Integer, nullable=False)
     closet_id = db.Column(db.Integer, db.ForeignKey('closet.closet_id'),
                           nullable=False)
-    closet = db.relationship('Closet', backref="pieces")
-    # possibly add activities here
 
+    # for the clarifai concepts
+    desc = db.Column(db.String(50), nullable=False)
+
+    # for top/bottom/one-piece/jacket
+    category = db.Column(db.String(50), nullable=False)
+
+    closet = db.relationship('Closet', backref="pieces")
+
+    # TODO: for activities; ask about foreign key
+    # activity_1 = db.Column(db.String(50), nullable=False)
+    # activity_2 = db.Column(db.String(50), nullable=False)
+    # activity_3 = db.Column(db.String(50), nullable=False)
+
+    # activity = db.relationship('Activity', backref="activities")
+
+    def __repr__(self):
+        """Provide helpful info when printed."""
+
+        return "<Piece piece_id = {} desc_1 = {} category = {}".format(
+            self.piece_id, self.desc_1, self.category)
 
 class Outfit(db.Model):
     """Outfit combination. Each piece can be in multiple outfits.
@@ -70,10 +95,20 @@ class Outfit(db.Model):
     closet_id = db.Column(db.Integer, db.ForeignKey('closet.closet_id'),
                           nullable=False)
 
+    def __repr__(self):
+        """Provides helpful info when printed."""
+
+        return "<Outfit outfit_id={} closet_id={}>".format(self.outfit_id, self.title)
+
 class OutfitPiece(db.Model):
     """Each item in each outfit."""
 
     __tablename__ = "outfitpieces"
+
+    outfitpiece_id = db.Column(db.Integer, 
+                        primary_key=True,
+                        autoincrement=True, 
+                        nullable=False)
 
     outfit_id = db.Column(db.Integer, 
                         db.ForeignKey('outfit.outfit_id'),
@@ -83,6 +118,8 @@ class OutfitPiece(db.Model):
                         db.ForeignKey('piece.piece_id'),
                         autoincrement=True, 
                         nullable=False)
+
+
     outfit = db.relationship('Outfit', backref="outfitpieces")
     piece = db.relationship('Piece', backref="outfitpieces")
 
@@ -102,29 +139,49 @@ class OutfitWear(db.Model):
                         nullable=False)
     outfit = db.relationship('Outfit', backref="outfitwears")
 
-class Activity(db.Model):
-    """Activity."""
+# add activities later
 
-    activity_id = db.Column(db.Integer, 
-                        primary_key=True,
-                        autoincrement=True, 
-                        nullable=False)
-    activity = db.Column(db.String(50), nullable=False)
+# class Activity(db.Model):
+#     """Activity."""
 
-class ActivityPiece(db.Model):
-    """Connects activity and pieces."""
+#     activity_id = db.Column(db.Integer, 
+#                         primary_key=True,
+#                         autoincrement=True, 
+#                         nullable=False)
+#     activity = db.Column(db.String(50), nullable=False)
 
-    __tablename__ = "activitypieces"
+# class ActivityPiece(db.Model):
+#     """Connects activity and pieces."""
 
-    activity_id = db.Column(db.Integer,
-                            db.ForeignKey('activity.activity_id'),
-                            nullable=False)
-    piece_id = db.Column(db.Integer,
-                        db.ForeignKey('piece.piece_id'),
-                        nullable=False)
+#     __tablename__ = "activitypieces"
 
-    piece = db.relationship('Piece', backref="activitypieces")
-    activity = db.relationship('Activity', backref="activitypieces")
+#     activity_id = db.Column(db.Integer,
+#                             db.ForeignKey('activity.activity_id'),
+#                             nullable=False)
+#     piece_id = db.Column(db.Integer,
+#                         db.ForeignKey('piece.piece_id'),
+#                         nullable=False)
 
+#     piece = db.relationship('Piece', backref="activitypieces")
+#     activity = db.relationship('Activity', backref="activitypieces")
 
-db_create_all()
+def connect_to_db(app, db_name):
+    """Connect to database."""
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///' + db_name
+    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.app = app
+    db.init_app(app)
+
+# connect_to_db(app, 'outfitless_db')
+
+# db_create_all()
+
+if __name__ == "__main__":
+    # As a convenience, if we run this module interactively, it will leave
+    # you in a state of being able to work with the database directly.
+
+    from server import app
+    connect_to_db(app, 'outfitless_db')
+    print("Connected to DB.")
