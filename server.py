@@ -1,25 +1,46 @@
-from flask import Flask, redirect, request, render_template, session, url_for, flash, send_from_directory, jsonify
-from flask_login import LoginManager, current_user, login_required
-from werkzeug.utils import secure_filename
-from flask_debugtoolbar import DebugToolbarExtension
-from jinja2 import StrictUndefined
 import os
 import server
 import unittest
 import requests
 import glob
-from helper import get_google_auth, get_concepts, process_image
+
+from flask import Flask, redirect, request, \
+                  render_template, session, url_for, flash, \
+                  send_from_directory, jsonify
+
+from flask_login import LoginManager, login_required, login_user, \
+logout_user, current_user, UserMixin
+
+# for debug toolbar
+from flask_debugtoolbar import DebugToolbarExtension
+
+# for uploads
+from werkzeug.utils import secure_filename
+
+#for jinja
+from jinja2 import StrictUndefined
+
+# my code
 import config
+from helper import get_google_auth, get_concepts, process_image
+from model import User, Closet, Piece, Outfit, OutfitPiece, \
+                  OutfitWear, connect_to_db, db
 
-import requests_oauthlib
+# for flask oauth
+from requests_oauthlib import OAuth2Session
+from requests.exceptions import HTTPError
 
-# from urllib import HTTPError
+# for google oauth
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
 
+
+# for clarifai
 from clarifai.rest import ClarifaiApp
 from clarifai.rest import Image as ClImage
-c_app = ClarifaiApp()
 
-from model import User, Closet, Piece, Outfit, OutfitPiece, OutfitWear, connect_to_db, db
+c_app = ClarifaiApp()
 
 # for Oufitless app
 app = Flask(__name__)
@@ -27,6 +48,11 @@ app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
 app.secret_key = os.environ['APP_SECRET_KEY']
+if not app.secret_key:
+    print("\n\n\n\nSECRET KEY IS NOT THERE.\n\n\n\n")
+
+else:
+    print("\n\n\nSECRET KEY LOADED.\n\n\n")
 
 # google oauth for flask login
 app.config.from_object(config.config['dev'])
@@ -35,9 +61,6 @@ login_manager = LoginManager(app)
 login_manager.session_protection = "strong"
 
 # google oauth
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
 CLIENT_SECRETS_FILE = 'google_oauth_client_secret.json'
 SCOPES = ['https://www.googleapis.com/auth/photoslibrary.appendonly',
           'https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata',
@@ -87,7 +110,7 @@ def authorize_user():
         include_granted_scopes='true')
 
     # Store the state so the callback can verify the auth server response.
-    session['state'] = state
+    session['oauth_state'] = state
 
     return redirect(authorization_url)
 
@@ -96,7 +119,7 @@ def oauth2callback():
     # Redirect user to home page if already logged in.
     if current_user is not None and current_user.is_authenticated:
         print("\n\n\nTHIS WORKED\n\n\n")
-        return redirect(url_for('shows_homepage'))
+        return redirect('/mycloset')
 
     if 'error' in request.args:
         if request.args.get('error') == 'access_denied':
@@ -110,19 +133,32 @@ def oauth2callback():
     else:
         # Execution reaches here when user has
         # successfully authenticated our app.
+
+        # this creates an OAuth2Session object
         google = get_google_auth(state=session['oauth_state'])
 
-        try:
-            token = google.fetch_token(config.Auth.TOKEN_URI,
-                    client_secret=config.Auth.CLIENT_SECRET,
-                    authorization_response=request.url)
+        print("\n\n\n\n\ngoogle before token:{}\n\n\n\n".format(google))
 
-        except HTTPError: #used to be HTTPError
-            return 'HTTPError occurred.'
+        # TODO: contribute error/raise issue to requests_oauthlib
+
+        # access_url = config.Auth.TOKEN_URI + '?grant_type=authorization_code' + '&code=' + request.args.get('code', '') + '&client_id=' + config.Auth.CLIENT_ID + '&redirect_uri=' + config.Auth.REDIRECT_URI + '&client_secret=' + config.Auth.CLIENT_SECRET + '&state=' + session['oauth_state']
+
+        # token = requests.post(access_url)
+
+        # print("\n\n\n\n\nthis is token:{}\n\n\n\n\n".format(token.text))
+        # try:
+        token = google.fetch_token(config.Auth.TOKEN_URI,
+                client_secret=config.Auth.CLIENT_SECRET,
+                authorization_response=request.url)
+
+        # except HTTPError: #used to be HTTPError
+        #     return 'HTTPError occurred.'
 
         google = get_google_auth(token=token)
 
         resp = google.get(config.Auth.USER_INFO)
+
+        print("\n\n\n\n\nresp: {}".format(resp))
 
         if resp.status_code == 200:
             user_data = resp.json()
@@ -209,11 +245,14 @@ if __name__ == '__main__':
     # When running locally, disable OAuthlib's HTTPs verification.
     # ACTION ITEM for developers:
     #     When running in production *do not* leave this option enabled.
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+    # os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 
     connect_to_db(app, 'outfitless_db')
 
     # Specify a hostname and port that are set as a valid redirect URI
     # for your API project in the Google API Console.
-    app.run('0.0.0.0', 5000, debug=True)
-    # ssl_context=('./ssl.crt', './ssl.key')
+
+    # NOTE: use this to generate ssl cert & key. 
+    # http://werkzeug.pocoo.org/docs/0.14/serving/#loading-contexts-by-hand
+    app.run('0.0.0.0', 5000, debug=True, ssl_context=('./ssl.cert', './ssl.key'))
