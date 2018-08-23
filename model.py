@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# DATA MODEL DEFINITIONS
+###############################################################
 
 class User(db.Model):
     """User."""
@@ -164,6 +164,8 @@ class OutfitWear(db.Model):
 
 #     piece = db.relationship('Piece', backref="activitypieces")
 #     activity = db.relationship('Activity', backref="activitypieces")
+
+##################################################################
 
 def connect_to_db(app, db_name):
     """Connect to database."""

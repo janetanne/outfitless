@@ -8,7 +8,7 @@ class Auth:
     REDIRECT_URI = 'https://localhost:5000/oauth2callback'
     AUTH_URI = os.environ['GOOGLE_AUTH_URI']
     TOKEN_URI = os.environ['GOOGLE_TOKEN_URI']
-    USER_INFO = 'https://www.googleapis.com/auth/userinfo.profile'
+    USER_INFO = 'https://www.googleapis.com/oauth2/v1/userinfo'
     SCOPES = ['https://www.googleapis.com/auth/photoslibrary.appendonly',
           'https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata',
           'https://www.googleapis.com/auth/userinfo.email', 

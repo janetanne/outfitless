@@ -9,7 +9,7 @@ from flask import Flask, redirect, request, \
                   send_from_directory, jsonify
 
 from flask_login import LoginManager, login_required, login_user, \
-logout_user, current_user, UserMixin
+                        logout_user, current_user, UserMixin
 
 # for debug toolbar
 from flask_debugtoolbar import DebugToolbarExtension
@@ -35,10 +35,11 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
-
 # for clarifai
 from clarifai.rest import ClarifaiApp
 from clarifai.rest import Image as ClImage
+
+##################################################################
 
 c_app = ClarifaiApp()
 
@@ -95,7 +96,7 @@ def login():
 
 @app.route('/authorize')
 def authorize_user():
-    """For authorizing user to use Google Photos Library API."""
+    """For user's initial authorization for app to access Google Photos Library API."""
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES)
@@ -118,7 +119,6 @@ def authorize_user():
 def oauth2callback():
     # Redirect user to home page if already logged in.
     if current_user is not None and current_user.is_authenticated:
-        print("\n\n\nTHIS WORKED\n\n\n")
         return redirect('/mycloset')
 
     if 'error' in request.args:
@@ -127,7 +127,6 @@ def oauth2callback():
         return 'Error encountered.'
 
     if 'code' not in request.args and 'state' not in request.args:
-        print("\n\n\n\n3rd if, means code and state not in request\n\n\n")
         return redirect(url_for('login'))
 
     else:
@@ -137,15 +136,7 @@ def oauth2callback():
         # this creates an OAuth2Session object
         google = get_google_auth(state=session['oauth_state'])
 
-        print("\n\n\n\n\ngoogle before token:{}\n\n\n\n".format(google))
 
-        # TODO: contribute error/raise issue to requests_oauthlib
-
-        # access_url = config.Auth.TOKEN_URI + '?grant_type=authorization_code' + '&code=' + request.args.get('code', '') + '&client_id=' + config.Auth.CLIENT_ID + '&redirect_uri=' + config.Auth.REDIRECT_URI + '&client_secret=' + config.Auth.CLIENT_SECRET + '&state=' + session['oauth_state']
-
-        # token = requests.post(access_url)
-
-        # print("\n\n\n\n\nthis is token:{}\n\n\n\n\n".format(token.text))
         # try:
         token = google.fetch_token(config.Auth.TOKEN_URI,
                 client_secret=config.Auth.CLIENT_SECRET,
@@ -158,7 +149,7 @@ def oauth2callback():
 
         resp = google.get(config.Auth.USER_INFO)
 
-        print("\n\n\n\n\nresp: {}".format(resp))
+        import pdb; pdb.set_trace()
 
         if resp.status_code == 200:
             user_data = resp.json()
@@ -238,15 +229,12 @@ def see_closet():
 
     return render_template('yourcloset.html')
 
-# from werkzeug.serving import make_ssl_devcert
-# make_ssl_devcert('./ssl', host='localhost')
 
 if __name__ == '__main__':
     # When running locally, disable OAuthlib's HTTPs verification.
     # ACTION ITEM for developers:
     #     When running in production *do not* leave this option enabled.
     # os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
 
     connect_to_db(app, 'outfitless_db')
 
@@ -255,4 +243,5 @@ if __name__ == '__main__':
 
     # NOTE: use this to generate ssl cert & key. 
     # http://werkzeug.pocoo.org/docs/0.14/serving/#loading-contexts-by-hand
+
     app.run('0.0.0.0', 5000, debug=True, ssl_context=('./ssl.cert', './ssl.key'))
