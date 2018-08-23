@@ -3,6 +3,8 @@ import server
 import unittest
 import requests
 import glob
+import json
+import datetime
 
 from flask import Flask, redirect, request, \
                   render_template, session, url_for, flash, \
@@ -58,7 +60,7 @@ else:
 # google oauth for flask login
 app.config.from_object(config.config['dev'])
 login_manager = LoginManager(app)
-# login_manager.login_view = "login"
+login_manager.login_view = "login"
 login_manager.session_protection = "strong"
 
 # google oauth
@@ -137,19 +139,17 @@ def oauth2callback():
         google = get_google_auth(state=session['oauth_state'])
 
 
-        # try:
-        token = google.fetch_token(config.Auth.TOKEN_URI,
-                client_secret=config.Auth.CLIENT_SECRET,
-                authorization_response=request.url)
+        try:
+            token = google.fetch_token(config.Auth.TOKEN_URI,
+                    client_secret=config.Auth.CLIENT_SECRET,
+                    authorization_response=request.url)
 
-        # except HTTPError: #used to be HTTPError
-        #     return 'HTTPError occurred.'
+        except HTTPError: #used to be HTTPError
+            return 'HTTPError occurred.'
 
         google = get_google_auth(token=token)
 
         resp = google.get(config.Auth.USER_INFO)
-
-        import pdb; pdb.set_trace()
 
         if resp.status_code == 200:
             user_data = resp.json()
@@ -161,6 +161,7 @@ def oauth2callback():
                 user.email = email
 
             user.name = user_data['name']
+
             print(token)
             user.tokens = json.dumps(token)
             user.avatar = user_data['picture']
@@ -171,6 +172,10 @@ def oauth2callback():
             return redirect(url_for('see_closet'))
         
         return 'Could not fetch your information.'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # for uploads in Outfitless #
 
@@ -200,7 +205,7 @@ def upload_file():
             flash('This is not a valid file, please use' + 
                     ' .png/.jpg/.jpeg/.tiff files only.')
 
-    return render_template('upload.html')
+    return redirect('verifycloset')
 
 @app.route('/upload', methods=['GET'])
 def show_upload_form():
@@ -215,19 +220,21 @@ def uploaded_file(filename):
 
 # for batch uploads to Clarifai #
 
-# @app.route('/verifycloset')
-# def show_closet():
+@app.route('/verifycloset')
+def show_uploads():
 
-#     closet_json = helper.process_image()
+    closet_json = process_image()
 
-#     for item in closet_json['outputs']:
-#         get_concepts(item)
+    for item in closet_json['outputs']:
+        get_concepts(item)
+
+
 
 @app.route('/mycloset')
 @login_required
 def see_closet():
 
-    return render_template('yourcloset.html')
+    return render_template('mycloset.html')
 
 
 if __name__ == '__main__':

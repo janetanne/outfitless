@@ -1,18 +1,19 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
 ###############################################################
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """User."""
 
     __tablename__ = "users"
 
-    user_id = db.Column(db.Integer, 
-                        primary_key=True,
-                        autoincrement=True, 
-                        nullable=False)
+    id = db.Column(db.Integer, 
+                   primary_key=True,
+                   autoincrement=True, 
+                   nullable=False)
     email = db.Column(db.String(100), nullable=False,
                       unique=True)
     name = db.Column(db.String(100), 
@@ -23,7 +24,7 @@ class User(db.Model):
     def __repr__(self):
         """Provides helpful info when printed."""
 
-        return "<User user_id={} email={}>".format(
+        return "<User id={} email={}>".format(
                 self.user_id, self.email)
 
 class Closet(db.Model):
@@ -35,7 +36,7 @@ class Closet(db.Model):
                         primary_key=True,
                         autoincrement=True, 
                         nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'),
+    id = db.Column(db.Integer, db.ForeignKey(User.id),
                         nullable=False)
 
     user = db.relationship('User', backref="closets")
@@ -57,7 +58,7 @@ class Piece(db.Model):
                         autoincrement=True, 
                         nullable=False)
     times_worn = db.Column(db.Integer, nullable=False)
-    closet_id = db.Column(db.Integer, db.ForeignKey('closet.closet_id'),
+    closet_id = db.Column(db.Integer, db.ForeignKey(Closet.closet_id),
                           nullable=False)
 
     # for the clarifai concepts
@@ -92,13 +93,14 @@ class Outfit(db.Model):
                         autoincrement=True, 
                         nullable=False)
     closet = db.relationship('Closet', backref="outfits")
-    closet_id = db.Column(db.Integer, db.ForeignKey('closet.closet_id'),
+    closet_id = db.Column(db.Integer, db.ForeignKey(Closet.closet_id),
                           nullable=False)
 
     def __repr__(self):
         """Provides helpful info when printed."""
 
-        return "<Outfit outfit_id={} closet_id={}>".format(self.outfit_id, self.title)
+        return "<Outfit outfit_id={} closet_id={}>".format(
+               self.outfit_id, self.title)
 
 class OutfitPiece(db.Model):
     """Each item in each outfit."""
@@ -111,11 +113,11 @@ class OutfitPiece(db.Model):
                         nullable=False)
 
     outfit_id = db.Column(db.Integer, 
-                        db.ForeignKey('outfit.outfit_id'),
+                        db.ForeignKey(Outfit.outfit_id),
                         autoincrement=True, 
                         nullable=False)
     piece_id = db.Column(db.Integer, 
-                        db.ForeignKey('piece.piece_id'),
+                        db.ForeignKey(Piece.piece_id),
                         autoincrement=True, 
                         nullable=False)
 
@@ -135,7 +137,7 @@ class OutfitWear(db.Model):
 
     date = db.Column(db.DateTime, nullable=False)
     outfit_id = db.Column(db.Integer, 
-                        db.ForeignKey('outfit.outfit_id'),
+                        db.ForeignKey(Outfit.outfit_id),
                         nullable=False)
     outfit = db.relationship('Outfit', backref="outfitwears")
 
@@ -176,7 +178,7 @@ def connect_to_db(app, db_name):
     db.app = app
     db.init_app(app)
 
-# connect_to_db(app, 'outfitless_db')
+# connect_to_db(server.app, 'outfitless_db')
 
 # db_create_all()
 
@@ -186,4 +188,6 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app, 'outfitless_db')
+    db.create_all()
+
     print("Connected to DB.")
