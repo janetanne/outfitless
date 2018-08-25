@@ -1,5 +1,8 @@
 import requests_oauthlib
 from config import Auth, Config, DevConfig, ProdConfig, config
+import glob
+from clarifai.rest import ClarifaiApp
+from clarifai.rest import Image as ClImage
 
 def get_google_auth(state=None, token=None):
     """Helper function to create OAuth2Session object."""
@@ -23,14 +26,18 @@ def get_concepts(_dict):
     """Takes in dictionary (or JSON) and returns a list with 
     the first three concepts for an item."""
     counter = 0
-    list_of_concepts = []
+    piece_data = {}
+
+    piece_data['piece_url'] = _dict['input']['data']['image']['url']
+    piece_data['c_id'] = _dict['id']
+    piece_data['concepts'] = []
 
     while counter <= 2:
         concept = _dict['data']['concepts'][counter]['name']
-        list_of_concepts.append(concept)
+        piece_data['concepts'].append(concept)
         counter +=1
 
-    return list_of_concepts
+    return piece_data
 
 # for item in batch['outputs']:
 #     return("FUNCTION PULLS: {}".format(get_concepts(item))

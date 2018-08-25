@@ -5,6 +5,7 @@ import requests
 import glob
 import json
 import datetime
+import pprint
 
 from flask import Flask, redirect, request, \
                   render_template, session, url_for, flash, \
@@ -24,7 +25,7 @@ from jinja2 import StrictUndefined
 
 # my code
 import config
-from helper import get_google_auth, get_concepts, process_image
+from helper import get_google_auth, get_concepts
 from model import User, Closet, Piece, Outfit, OutfitPiece, \
                   OutfitWear, connect_to_db, db
 
@@ -199,12 +200,13 @@ def upload_file():
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('Your photo has been uploaded!')
+            
 
         else:
             flash('This is not a valid file, please use' + 
                     ' .png/.jpg/.jpeg/.tiff files only.')
 
+    flash('Your photos have been uploaded!')
     return redirect('verifycloset')
 
 @app.route('/upload', methods=['GET'])
@@ -223,11 +225,16 @@ def uploaded_file(filename):
 @app.route('/verifycloset')
 def show_uploads():
 
+    upload_data = []
+
     closet_json = process_image()
 
     for item in closet_json['outputs']:
-        get_concepts(item)
+        item_concepts = get_concepts(item)
+        upload_data.append(item_concepts)
 
+    return render_template('verifycloset.html', 
+                            upload_data=upload_data)
 
 
 @app.route('/mycloset')
@@ -235,6 +242,38 @@ def show_uploads():
 def see_closet():
 
     return render_template('mycloset.html')
+
+################ helper function for clarifai ####################
+
+def process_image():
+    """Sends image/dataset to Clarifai, returns JSON of Clarifai results for this batch."""
+    index = 0
+    counter = 0
+    batch_size = 32
+    user_files = glob.glob('./test_uploads/*')
+
+    total_files = len(user_files)
+
+    while (counter < total_files):
+        print("Processing batch " + str(index+1))
+
+        imageList = []
+
+        for x in range(counter, counter + batch_size - 1):
+            try:
+                # import pdb; pdb.set_trace()
+                imageList.append(ClImage(filename=user_files[x]))
+            except IndexError:
+                break
+
+        c_app.inputs.bulk_create_images(imageList)
+
+        model = c_app.models.get('apparel')
+
+        counter = counter + batch_size
+        index = index + 1
+
+    return model.predict(imageList)
 
 
 if __name__ == '__main__':

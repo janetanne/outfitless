@@ -4,7 +4,9 @@
 
 {% block content %}
     <h1>Verify your closet</h1>
-
     
+    {% for piece in upload_data %}
+        {{ piece }}
+    {% endfor %}
 
 {% endblock %}
