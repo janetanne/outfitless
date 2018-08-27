@@ -222,7 +222,7 @@ def uploaded_file(filename):
 
 # for batch uploads to Clarifai #
 
-@app.route('/verifycloset')
+@app.route('/verifycloset', methods=['GET'])
 def show_uploads():
 
     upload_data = []
@@ -236,6 +236,10 @@ def show_uploads():
     return render_template('verifycloset.html', 
                             upload_data=upload_data)
 
+@app.route('/verifycloset', methods=['POST'])
+def process_form():
+
+    return redirect('/mycloset')
 
 @app.route('/mycloset')
 @login_required

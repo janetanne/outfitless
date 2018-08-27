@@ -6,7 +6,35 @@
     <h1>Verify your closet</h1>
     
     {% for piece in upload_data %}
-        {{ piece }}
+        <div class="piece"><img src={{ 'piece_url'}}>
+        <br>
+        <fieldset>
+            <legend>Piece details</legend>
+            <form action="/verifycloset" method="post">
+            <label>Description:</label> 
+                {% for concept in piece['concepts'] %}
+                <input type="radio" name="desc" value="{{ concept }}"/>{{ concept }}
+                {% endfor %}
+            <br>
+            If the above doesn't apply, write a <label>short description</label> here:<input type="text" name="desc"/>
+            <br>
+            <label>Clothing type:</label><select name="clothing_type">
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+                <option value="Dress">Dress</option>
+                <option value="Jacket">Jacket</option></select>
+            <br>
+            <label>Category:</label>
+                <input type="radio" name="category" value="workout"/>Workout
+                <input type="radio" name="category" value="dressy"/>
+                Dressy
+                <input type="radio" name="category" value="casual"/>
+                Casual
+            <br>
+        </fieldset>
+        <br>
     {% endfor %}
+        <input type="submit"/>
+        </form>
 
 {% endblock %}

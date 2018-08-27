@@ -65,6 +65,9 @@ class Piece(db.Model):
     desc = db.Column(db.String(50), nullable=False)
 
     # for top/bottom/one-piece/jacket
+    clothing_type = db.Column(db.String(50), nullable=False)
+
+    # for athleisure/etc.
     category = db.Column(db.String(50), nullable=False)
 
     closet = db.relationship('Closet', backref="pieces")
