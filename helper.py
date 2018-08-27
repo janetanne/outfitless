@@ -38,36 +38,3 @@ def get_concepts(_dict):
         counter +=1
 
     return piece_data
-
-# for item in batch['outputs']:
-#     return("FUNCTION PULLS: {}".format(get_concepts(item))
-
-def process_image():
-    """Sends image/dataset to Clarifai, returns JSON of Clarifai results for this batch."""
-    index = 0
-    counter = 0
-    batch_size = 32
-    user_files = glob.glob('./test_uploads/*')
-
-    total_files = len(user_files)
-
-    while (counter < total_files):
-        print("Processing batch " + str(index+1))
-
-        imageList = []
-
-        for x in range(counter, counter + batch_size - 1):
-            try:
-                # import pdb; pdb.set_trace()
-                imageList.append(ClImage(filename=user_files[x]))
-            except IndexError:
-                break
-
-        c_app.inputs.bulk_create_images(imageList)
-
-        model = c_app.models.get('apparel')
-
-        counter = counter + batch_size
-        index = index + 1
-
-    return jsonify(model.predict(imageList))

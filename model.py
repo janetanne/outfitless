@@ -176,7 +176,7 @@ def connect_to_db(app, db_name):
     """Connect to database."""
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///' + db_name
-    app.config['SQLALCHEMY_ECHO'] = True
+    # app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
