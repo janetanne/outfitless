@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
         return "<User id={} email={}>".format(
                 self.user_id, self.email)
 
+# TODO: with multiple closets
 class Closet(db.Model):
     """Closet. A user can have multiple closets."""
 
@@ -68,7 +69,7 @@ class Piece(db.Model):
     clothing_type = db.Column(db.String(50), nullable=False)
 
     # for athleisure/etc.
-    category = db.Column(db.String(50), nullable=False)
+    category = db.Column(db.String(100), nullable=False)
 
     closet = db.relationship('Closet', backref="pieces")
 

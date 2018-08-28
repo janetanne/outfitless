@@ -239,7 +239,16 @@ def show_uploads():
 @app.route('/verifycloset', methods=['POST'])
 def process_form():
 
-    return redirect('/mycloset')
+    desc = request.form.get("desc")
+    other_desc = request.form.get("other_desc")
+    clothing_type = request.form.get("clothing_type")
+    category = request.form.get("category")
+
+    print("\n\n\ndesc: {}\n\nother_desc: {}\n\n \
+          clothing_type: {}\n\ncategory: {}\n\n\n".format(desc,
+            other_desc, clothing_type, category))
+
+    return "this worked."
 
 @app.route('/mycloset')
 @login_required

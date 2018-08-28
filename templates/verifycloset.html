@@ -6,35 +6,42 @@
     <h1>Verify your closet</h1>
     
     {% for piece in upload_data %}
-        <div class="piece"><img src={{ 'piece_url'}}>
+        <div class="piece"><img src={{ piece['piece_url'] }}>
         <br>
         <fieldset>
             <legend>Piece details</legend>
-            <form action="/verifycloset" method="post">
+            <form id="form-{{ piece['c_id'] }}" onsubmit=savePieceDetails("{{ piece['c_id'] }}")>
             <label>Description:</label> 
                 {% for concept in piece['concepts'] %}
-                <input type="radio" name="desc" value="{{ concept }}"/>{{ concept }}
+                <input type="radio" name="desc" value="{{ concept }}" class="desc-field"/> {{ concept }}
                 {% endfor %}
+                <input type="radio" name="desc" value="other"/> Other
             <br>
-            If the above doesn't apply, write a <label>short description</label> here:<input type="text" name="desc"/>
+            <label>If none apply, describe here:</label> <input type="text" name="other_desc" class="other-desc-field"/>
             <br>
-            <label>Clothing type:</label><select name="clothing_type">
+            <label>Clothing type: </label><select name="clothing_type" class="clothing-type-field">
                 <option value="top">Top</option>
                 <option value="bottom">Bottom</option>
                 <option value="Dress">Dress</option>
                 <option value="Jacket">Jacket</option></select>
             <br>
             <label>Category:</label>
-                <input type="radio" name="category" value="workout"/>Workout
-                <input type="radio" name="category" value="dressy"/>
-                Dressy
-                <input type="radio" name="category" value="casual"/>
-                Casual
+                <input type="checkbox" name="category" value="work" class="category-field"/>
+                <label for="work">Work</label>
+                <input type="checkbox" name="category" value="workout" class="category-field"/>
+                <label for="workout">Workout</label>
+                <input type="checkbox" name="category" value="weekend" class="category-field"/><label for="weekend">Weekend</label>
+                <input type="checkbox" name="category" value="date" class="category-field"/>
+                <label for="date">Date</label>
+                <input type="checkbox" name="category" value="lounge" class="category-field"/>
+                <label for="lounge">Lounge</label>
+                <input type="checkbox" name="category" value="party" class="category-field"/>
+                <label for="party">Party</label>
             <br>
-        </fieldset>
+            <input type="submit" value="Save"/>
+        </form>
+        </fieldset></div>
         <br>
     {% endfor %}
-        <input type="submit"/>
-        </form>
 
 {% endblock %}
