@@ -26,7 +26,7 @@ from jinja2 import StrictUndefined
 # my code
 import config
 from helper import get_google_auth, get_concepts
-from model import User, Closet, Piece, Outfit, OutfitPiece, \
+from model import User, Piece, Outfit, OutfitPiece, \
                   OutfitWear, connect_to_db, db
 
 # for flask oauth
@@ -239,16 +239,24 @@ def show_uploads():
 @app.route('/verifycloset', methods=['POST'])
 def process_form():
 
-    desc = request.form.get("desc")
-    other_desc = request.form.get("other_desc")
+    # gets data from piece form
+
     clothing_type = request.form.get("clothing_type")
     category = request.form.get("category")
+    c_id = request.form.get("c_id")
+    desc = request.form.get("desc")
+    other_desc = request.form.get("other_desc")
+    
+    if not desc:
+        desc = other_desc
 
-    print("\n\n\ndesc: {}\n\nother_desc: {}\n\n \
-          clothing_type: {}\n\ncategory: {}\n\n\n".format(desc,
-            other_desc, clothing_type, category))
+    new_piece = Piece(times_worn=0, desc=desc, 
+                      clothing_type=clothing_type,
+                      category=category)
+    db.session.add(new_piece)
+    db.session.commit()
 
-    return "this worked."
+    return c_id
 
 @app.route('/mycloset')
 @login_required

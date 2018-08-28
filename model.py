@@ -27,27 +27,27 @@ class User(db.Model, UserMixin):
         return "<User id={} email={}>".format(
                 self.user_id, self.email)
 
-# TODO: with multiple closets
-class Closet(db.Model):
-    """Closet. A user can have multiple closets."""
+# # TODO: with multiple closets
+# class Closet(db.Model):
+#     """Closet. A user can have multiple closets."""
 
-    __tablename__ = "closets"
+#     __tablename__ = "closets"
 
-    closet_id = db.Column(db.Integer, 
-                        primary_key=True,
-                        autoincrement=True, 
-                        nullable=False)
-    id = db.Column(db.Integer, db.ForeignKey(User.id),
-                        nullable=False)
+#     closet_id = db.Column(db.Integer, 
+#                         primary_key=True,
+#                         autoincrement=True, 
+#                         nullable=False)
+#     id = db.Column(db.Integer, db.ForeignKey(User.id),
+#                         nullable=False)
 
-    user = db.relationship('User', backref="closets")
-    closet_name = db.Column(db.String(50), nullable=False)
+#     user = db.relationship('User', backref="closets")
+#     closet_name = db.Column(db.String(50), nullable=False)
 
-    def __repr__(self):
-        """Provides helpful info when printed."""
+#     def __repr__(self):
+#         """Provides helpful info when printed."""
 
-        return "<Closet closet_id={} closet_name={}>".format(
-            self.closet_id, self.closet_name)
+#         return "<Closet closet_id={} closet_name={}>".format(
+#             self.closet_id, self.closet_name)
 
 class Piece(db.Model):
     """Piece of clothing. A closet has multiple pieces."""
@@ -59,7 +59,7 @@ class Piece(db.Model):
                         autoincrement=True, 
                         nullable=False)
     times_worn = db.Column(db.Integer, nullable=False)
-    closet_id = db.Column(db.Integer, db.ForeignKey(Closet.closet_id),
+    id = db.Column(db.Integer, db.ForeignKey(User.id),
                           nullable=False)
 
     # for the clarifai concepts
@@ -71,7 +71,7 @@ class Piece(db.Model):
     # for athleisure/etc.
     category = db.Column(db.String(100), nullable=False)
 
-    closet = db.relationship('Closet', backref="pieces")
+    user = db.relationship('User', backref="pieces")
 
     # TODO: for activities; ask about foreign key
     # activity_1 = db.Column(db.String(50), nullable=False)
@@ -83,8 +83,11 @@ class Piece(db.Model):
     def __repr__(self):
         """Provide helpful info when printed."""
 
-        return "<Piece piece_id = {} desc_1 = {} category = {}".format(
-            self.piece_id, self.desc_1, self.category)
+        return "<Piece piece_id = {} desc = {} category = {} \
+               clothing_type = {}".format(self.piece_id, 
+                                          self.desc, 
+                                          self.category, 
+                                          self.clothing_type)
 
 class Outfit(db.Model):
     """Outfit combination. Each piece can be in multiple outfits.
@@ -96,15 +99,15 @@ class Outfit(db.Model):
                         primary_key=True,
                         autoincrement=True, 
                         nullable=False)
-    closet = db.relationship('Closet', backref="outfits")
-    closet_id = db.Column(db.Integer, db.ForeignKey(Closet.closet_id),
+    user = db.relationship('User', backref="outfits")
+    id = db.Column(db.Integer, db.ForeignKey(User.id),
                           nullable=False)
 
     def __repr__(self):
         """Provides helpful info when printed."""
 
-        return "<Outfit outfit_id={} closet_id={}>".format(
-               self.outfit_id, self.title)
+        return "<Outfit outfit_id={}".format(
+               self.outfit_id)
 
 class OutfitPiece(db.Model):
     """Each item in each outfit."""

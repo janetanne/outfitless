@@ -10,7 +10,7 @@
         <br>
         <fieldset>
             <legend>Piece details</legend>
-            <form id="form-{{ piece['c_id'] }}" onsubmit=savePieceDetails("{{ piece['c_id'] }}")>
+            <form id="form-{{ piece['c_id'] }}" onsubmit=savePieceDetails("{{ piece['c_id'] }}") class="visible">
             <label>Description:</label> 
                 {% for concept in piece['concepts'] %}
                 <input type="radio" name="desc" value="{{ concept }}" class="desc-field"/> {{ concept }}
@@ -38,9 +38,11 @@
                 <input type="checkbox" name="category" value="party" class="category-field"/>
                 <label for="party">Party</label>
             <br>
-            <input type="submit" value="Save"/>
+            <input type="submit" value="Save" class="save-button"/>
         </form>
-        </fieldset></div>
+        <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
+        </fieldset>
+        </div>
         <br>
     {% endfor %}
 
