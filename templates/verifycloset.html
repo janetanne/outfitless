@@ -10,20 +10,20 @@
         <br>
         <fieldset>
             <legend>Piece details</legend>
-            <form id="form-{{ piece['c_id'] }}" onsubmit=savePieceDetails("{{ piece['c_id'] }}") class="visible">
+            <form id="form-{{ piece['c_id'] }}" class="visible" method="post" action="/verifycloset">
             <label>Description:</label> 
                 {% for concept in piece['concepts'] %}
                 <input type="radio" name="desc" value="{{ concept }}" class="desc-field"/> {{ concept }}
                 {% endfor %}
-                <input type="radio" name="desc" value="other"/> Other
+                <input type="radio" name="desc" value="other" class="desc-field"/> Other
             <br>
             <label>If none apply, describe here:</label> <input type="text" name="other_desc" class="other-desc-field"/>
             <br>
             <label>Clothing type: </label><select name="clothing_type" class="clothing-type-field">
                 <option value="top">Top</option>
                 <option value="bottom">Bottom</option>
-                <option value="Dress">Dress</option>
-                <option value="Jacket">Jacket</option></select>
+                <option value="dress">Dress</option>
+                <option value="jacket">Jacket</option></select>
             <br>
             <label>Category:</label>
                 <input type="checkbox" name="category" value="work" class="category-field"/>
@@ -38,7 +38,8 @@
                 <input type="checkbox" name="category" value="party" class="category-field"/>
                 <label for="party">Party</label>
             <br>
-            <input type="submit" value="Save" class="save-button"/>
+            <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
+            <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>
         </form>
         <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
         </fieldset>

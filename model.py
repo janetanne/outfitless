@@ -189,12 +189,12 @@ def connect_to_db(app, db_name):
 
 # db_create_all()
 
-if __name__ == "__main__":
-    # As a convenience, if we run this module interactively, it will leave
-    # you in a state of being able to work with the database directly.
+# if __name__ == "__main__":
+#     # As a convenience, if we run this module interactively, it will leave
+#     # you in a state of being able to work with the database directly.
 
-    from server import app
-    connect_to_db(app, 'outfitless_db')
-    db.create_all()
+#     from server import app
+#     connect_to_db(app, 'outfitless_db')
+#     db.create_all()
 
-    print("Connected to DB.")
+#     print("Connected to DB.")

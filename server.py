@@ -82,7 +82,7 @@ def shows_homepage():
 
     return render_template('home.html')
 
-@app.route('/login')
+@app.route('/login', methods=["GET"])
 def login():
 
     if current_user.is_authenticated:
@@ -233,6 +233,8 @@ def show_uploads():
         item_concepts = get_concepts(item)
         upload_data.append(item_concepts)
 
+    print("\n\n\nGET request is happening\n\n\n\n")
+
     return render_template('verifycloset.html', 
                             upload_data=upload_data)
 
@@ -242,19 +244,19 @@ def process_form():
     # gets data from piece form
 
     clothing_type = request.form.get("clothing_type")
-    category = request.form.get("category")
+    category = request.form.getlist("category")
     c_id = request.form.get("c_id")
     desc = request.form.get("desc")
-    other_desc = request.form.get("other_desc")
-    
-    if not desc:
-        desc = other_desc
+    u_id = current_user.id
 
     new_piece = Piece(times_worn=0, desc=desc, 
                       clothing_type=clothing_type,
-                      category=category)
+                      category=category,
+                      id=u_id)
     db.session.add(new_piece)
     db.session.commit()
+
+    print("\n\n\n\nPOST REQUEST IS HAPPENING\n\n\n\n")
 
     return c_id
 

@@ -7,23 +7,15 @@ function flashSaved(result) {
 
 function savePieceDetails(thing) {
 
-    let $inputs= $(`#form-${thing} :input`);
+    // creates list of all elements in form
+    let formInputs= $(`#form-${thing}`).serialize();
 
-    // for creating a string with category checkboxes
-    let categoryString = "";
-
-    $(".category-field:checked").each(function() {
-        categoryString += ($(this).val()) + ",";
+    $.ajax({
+        type: "POST",
+        url: '/verifycloset',
+        data: formInputs,
+        dataType: "json",
+        success: flashSaved()
     });
-
-    let formInputs = {
-        "desc": $(".desc-field").val(),
-        "other_desc": $(".other-desc-field").val(),
-        "clothing_type": $(".clothing-type-field").val(),
-        "category": categoryString,
-        "c_id": thing,
-    };
-    
-    $.post("/verifycloset", formInputs, flashSaved);
-
-};
+}
+    // $.post("/verifycloset", formInputs, flashSaved);
