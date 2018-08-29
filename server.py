@@ -77,7 +77,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'tiff'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
-#  @flask_login.login_required
 def shows_homepage():
 
     return render_template('home.html')
@@ -210,6 +209,7 @@ def upload_file():
     return redirect('verifycloset')
 
 @app.route('/upload', methods=['GET'])
+@login_required
 def show_upload_form():
     """Shows upload form for user to upload photos."""
 
@@ -220,9 +220,8 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
-# for batch uploads to Clarifai #
-
 @app.route('/verifycloset', methods=['GET'])
+@login_required
 def show_uploads():
 
     upload_data = []
@@ -239,20 +238,25 @@ def show_uploads():
                             upload_data=upload_data)
 
 @app.route('/verifycloset', methods=['POST'])
+@login_required
 def process_form():
 
     # gets data from piece form
-
+    u_id = current_user.id
     clothing_type = request.form.get("clothing_type")
     category = request.form.getlist("category")
     c_id = request.form.get("c_id")
     desc = request.form.get("desc")
-    u_id = current_user.id
+    other_desc = request.form.get("other_desc")
+    
+    if other_desc:
+        desc = other_desc
 
     new_piece = Piece(times_worn=0, desc=desc, 
                       clothing_type=clothing_type,
                       category=category,
                       id=u_id)
+
     db.session.add(new_piece)
     db.session.commit()
 

@@ -15,11 +15,10 @@
                 {% for concept in piece['concepts'] %}
                 <input type="radio" name="desc" value="{{ concept }}" class="desc-field"/> {{ concept }}
                 {% endfor %}
-                <input type="radio" name="desc" value="other" class="desc-field"/> Other
             <br>
-            <label>If none apply, describe here:</label> <input type="text" name="other_desc" class="other-desc-field"/>
+            <label>If none of the above apply, describe here:</label> <input type="text" name="other_desc" class="other-desc-field"/>
             <br>
-            <label>Clothing type: </label><select name="clothing_type" class="clothing-type-field">
+            <label>Clothing type:</label> <select name="clothing_type" class="clothing-type-field">
                 <option value="top">Top</option>
                 <option value="bottom">Bottom</option>
                 <option value="dress">Dress</option>
@@ -40,8 +39,9 @@
             <br>
             <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
             <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>
-        </form>
-        <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
+            <br>
+            </form>
+            <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
         </fieldset>
         </div>
         <br>

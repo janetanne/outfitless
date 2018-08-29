@@ -15,7 +15,9 @@ function savePieceDetails(thing) {
         url: '/verifycloset',
         data: formInputs,
         dataType: "json",
-        success: flashSaved()
+        success: flashSaved(thing)
     });
+
+    console.log(formInputs);
 }
     // $.post("/verifycloset", formInputs, flashSaved);
