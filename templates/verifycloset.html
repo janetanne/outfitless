@@ -3,7 +3,9 @@
 {% block title %}Verify your closet{% endblock %}
 
 {% block content %}
-    <h1>Verify your closet</h1>
+    <h3>Verify your closet</h3>
+
+    <button type="button" class="my-closet-button" value="go-to-closet"><a href="/mycloset">Go to your closet</a></button>
     
     {% for piece in upload_data %}
         <div class="piece"><img src={{ piece['piece_url'] }}>
@@ -38,6 +40,7 @@
                 <label for="party">Party</label>
             <br>
             <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
+            <input type="hidden" value="{{ piece['piece_url'] }}" name="img_url">
             <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>
             <br>
             </form>
@@ -46,5 +49,7 @@
         </div>
         <br>
     {% endfor %}
+
+    <button type="button" class="my-closet-button" value="go-to-closet"><a href="/mycloset">Go to your closet</a></button>
 
 {% endblock %}

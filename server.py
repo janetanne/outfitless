@@ -27,7 +27,8 @@ from jinja2 import StrictUndefined
 import config
 from helper import get_google_auth, get_concepts
 from model import User, Piece, Outfit, OutfitPiece, \
-                  OutfitWear, connect_to_db, db
+                  OutfitWear, Category, CategoryPiece, \
+                  connect_to_db, db
 
 # for flask oauth
 from requests_oauthlib import OAuth2Session
@@ -71,11 +72,14 @@ SCOPES = ['https://www.googleapis.com/auth/photoslibrary.appendonly',
           'https://www.googleapis.com/auth/userinfo.email', 
           'https://www.googleapis.com/auth/userinfo.profile']
 
-# for uploads in Outfitless app
-UPLOAD_FOLDER = './test_uploads' # TODO: remember to change this at production
+# for uploads #
+
+UPLOAD_FOLDER = './test_uploads' 
+# TODO: remember to change this at production
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'tiff'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+######################### routes ###################################
 @app.route('/')
 def shows_homepage():
 
@@ -232,8 +236,6 @@ def show_uploads():
         item_concepts = get_concepts(item)
         upload_data.append(item_concepts)
 
-    print("\n\n\nGET request is happening\n\n\n\n")
-
     return render_template('verifycloset.html', 
                             upload_data=upload_data)
 
@@ -242,25 +244,42 @@ def show_uploads():
 def process_form():
 
     # gets data from piece form
-    u_id = current_user.id
+    u_id = current_user.u_id
     clothing_type = request.form.get("clothing_type")
-    category = request.form.getlist("category")
+    img_url = request.form.get("img_url")
+    categories = request.form.getlist("category")
     c_id = request.form.get("c_id")
     desc = request.form.get("desc")
     other_desc = request.form.get("other_desc")
-    
+
     if other_desc:
         desc = other_desc
-
-    new_piece = Piece(times_worn=0, desc=desc, 
+     
+    new_piece = Piece(times_worn=0, 
+                      desc=desc, 
                       clothing_type=clothing_type,
-                      category=category,
-                      id=u_id)
+                      u_id=u_id,
+                      img_url=img_url)
 
     db.session.add(new_piece)
     db.session.commit()
 
-    print("\n\n\n\nPOST REQUEST IS HAPPENING\n\n\n\n")
+    for item in categories:
+        check_category = Category.query.filter(Category.category==item)
+        check_category = check_category.first()
+
+        # creates new category in categories table
+        if not check_category:
+            check_category = Category(category=item)
+            db.session.add(check_category)
+            db.session.commit()
+
+        new_category_piece = CategoryPiece(piece_id=new_piece.piece_id,
+                                           cat_id=check_category.cat_id)
+        db.session.add(new_category_piece)
+        db.session.commit()
+
+    print("\n\nPOST REQUEST IS HAPPENING\n\n")
 
     return c_id
 
@@ -269,6 +288,12 @@ def process_form():
 def see_closet():
 
     return render_template('mycloset.html')
+
+@app.route('/ootd')
+@login_required
+def see_todays_outfit():
+
+    return render_template('ootd.html')
 
 ################ helper function for clarifai ####################
 
