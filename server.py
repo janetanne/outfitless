@@ -287,7 +287,9 @@ def process_form():
 @login_required
 def see_closet():
 
-    return render_template('mycloset.html')
+    all_pieces = Piece.query.all()
+
+    return render_template('mycloset.html', all_pieces=all_pieces)
 
 @app.route('/ootd')
 @login_required

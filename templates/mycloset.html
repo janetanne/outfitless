@@ -10,6 +10,23 @@
 
 <p>Nothing in here yet? <a href='/upload'>Upload</a> clothes to your closet.</p>
 
-
+{% for piece in all_pieces %}
+    <div class="closetpiece-data">
+    <img src={{ piece.img_url }}>
+    <br>
+    <fieldset><legend>Piece Details</legend>
+        <label>Description:</label> {{ piece.desc }}
+        <br>
+        <label>Clothing Type:</label> {{ piece.clothing_type }}
+        <br>
+        <label>Times Worn:</label> {{ piece.times_worn }}
+        <br>
+        <label>Categories:</label> 
+        {% for category in piece.categories %}
+            {{ category.category }} •
+            {% endfor %}
+    </fieldset>
+    </div>
+{% endfor %}
 
 {% endblock %}
