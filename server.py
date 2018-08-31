@@ -6,6 +6,7 @@ import glob
 import json
 import datetime
 import pprint
+import random
 
 from flask import Flask, redirect, request, \
                   render_template, session, url_for, flash, \
@@ -291,11 +292,48 @@ def see_closet():
 
     return render_template('mycloset.html', all_pieces=all_pieces)
 
+####### note: add feature that doesn't reuse outfits given a certain time
+
 @app.route('/ootd')
 @login_required
 def see_todays_outfit():
 
-    return render_template('ootd.html')
+    all_pieces = Piece.query.all()
+    all_dresses = Piece.query.filter(Piece.clothing_type == "dress").all()
+    all_tops = Piece.query.filter(Piece.clothing_type == "top").all()
+    all_bottoms = Piece.query.filter(Piece.clothing_type == "bottom").all()
+    all_jackets = Piece.query.filter(Piece.clothing_type == "jacket").all()
+
+    outfit = []
+
+    piece_1 = random.choice(all_pieces)
+    ootd.append(piece_1)
+
+    if piece_1.clothing_type == "dress":
+        piece_2 = random.choice(all_jackets)
+        ootd.append(piece_2)
+
+    elif piece_1.clothing_type == "top":
+        piece_2 = random.choice(all_bottoms)
+        piece_3 = random.choice(all_jackets)
+        ootd.extend([piece_2, piece_3])
+
+    elif piece_1.clothing_type == "bottom":
+        piece_2 = random.choice(all_tops)
+        piece_3 = random.choice(all_jackets)
+        ootd.extend([piece_2, piece_3])
+
+    elif piece_1.clothing_type == "jacket":
+        piece_2 = random.choice(all_tops)
+        piece_3 = random.choice(all_bottoms)
+        ootd.extend([piece_2, piece_3])
+
+    return render_template('ootd.html', outfit=outfit)
+
+@app.route('/ootd', methods=['POST'])
+@login_required
+def process_outfit():
+
 
 ################ helper function for clarifai ####################
 

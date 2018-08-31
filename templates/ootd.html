@@ -7,12 +7,11 @@
 <h1>OOTD: Outfit of the Day</h1>
 
 <p>Here's your OOTD!</p>
-<img src="">*image of top*
-<br># of times worn
+{% for piece in ootd %}
+<img src={{ piece.img_url }}>
 <br>
 <br>
-<img src ="">*image of bottom*
-<br># of times worn
+{% endfor %}
 
 <br><br>like this outfit or nah?
 

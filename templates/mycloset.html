@@ -9,7 +9,7 @@
 <p>Welcome to your closet!</p>
 
 <p>Nothing in here yet? <a href='/upload'>Upload</a> clothes to your closet.</p>
-
+<br>
 {% for piece in all_pieces %}
     <div class="closetpiece-data">
     <img src={{ piece.img_url }}>
@@ -27,6 +27,7 @@
             {% endfor %}
     </fieldset>
     </div>
+    <br><br>
 {% endfor %}
 
 {% endblock %}
