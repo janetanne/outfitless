@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
 
     __tablename__ = "users"
 
-    u_id = db.Column(db.Integer, 
+    user_id = db.Column(db.Integer, 
                    primary_key=True,
                    autoincrement=True, 
                    nullable=False)
@@ -21,11 +21,14 @@ class User(db.Model, UserMixin):
     tokens = db.Column(db.Text, nullable=False)
     avatar = db.Column(db.String(200))
 
+    def get_id(self): 
+        return (self.user_id)
+
     def __repr__(self):
         """Provides helpful info when printed."""
 
-        return "<User u_id={} email={} name={}>".format(
-                self.u_id, self.email, self.name)
+        return "<User id={} email={} name={}>".format(
+                self.user_id, self.email, self.name)
 
 class Piece(db.Model):
     """Piece of clothing. A closet has multiple pieces."""
@@ -39,7 +42,7 @@ class Piece(db.Model):
     times_worn = db.Column(db.Integer, nullable=False)
     cost = db.Column(db.Float, nullable=False)
     cost_per_use = db.Column(db.Float, nullable=False)
-    u_id = db.Column(db.Integer, db.ForeignKey(User.u_id),
+    user_id = db.Column(db.Integer, db.ForeignKey(User.user_id),
                           nullable=False)
 
     # for the clarifai concept/description of item
@@ -85,7 +88,7 @@ class Outfit(db.Model):
                         autoincrement=True, 
                         nullable=False)
     user = db.relationship('User', backref="outfits")
-    u_id = db.Column(db.Integer, db.ForeignKey(User.u_id),
+    user_id = db.Column(db.Integer, db.ForeignKey(User.user_id),
                           nullable=False)
 
     def __repr__(self):

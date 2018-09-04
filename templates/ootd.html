@@ -9,19 +9,19 @@
 <p>Here's your OOTD!</p>
 <div id="outfit">
 <img src={{ outfit['piece_1']['img_url'] }}>
-<input type="hidden" value="{{ outfit['piece_1']['piece_id'] }}" name="piece_1" id="piece_1">
 <br>
 <img src={{ outfit['piece_2']['img_url'] }}>
-<input type="hidden" value="{{ outfit['piece_2']['piece_id'] }}" name="piece_2" id="piece_2">
 <br>
 {% if 'piece_3' in outfit %}
 <img src={{ outfit['piece_3']['img_url'] }}>
-<input type="hidden" value="{{ outfit['piece_3']['piece_id'] }}" name="piece_3" id="piece_3">
 {% endif %}
 </div>
 
 <br>
-<button type="button" id="btn-wear-outfit" value="wear-outfit" onclick=wearOutfit('{{ outfit|tojson }}')>I'll wear this today!</button>  <button type="button" id="btn-choose-other-outfit" value="choose-another-outfit"><a href="/ootd">Nah, choose another outfit please!</a></button>
+<button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today</button>
+
+<button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please</a></button>
+
+<button type="button" id="btn-go-home" class="hidden"><a href="/">Back to homepage</a></button>
 <br><br>
 {% endblock %}
-

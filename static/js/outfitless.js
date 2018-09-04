@@ -24,20 +24,28 @@ function savePieceDetails(thing) {
 };
 
 function flashWorn(result) {
-    console.log(result);
+    $("#btn-go-home").removeClass("hidden").addClass("visible");
+    $("#btn-choose-other-outfit").removeClass("visible").addClass("hidden");
+    $("#btn-wear-outfit").html(result);
 };
 
 function wearOutfit(outfitjson) {
 
-    let outfitData= {
-        "piece_1": $('#piece_1').val(),
-        "piece_2": $('#piece_2').val(),
-        "piece_3": $('#piece_3').val(),
-    };
+    let piece_1 = outfitjson['piece_1']['piece_id'];
+    let piece_2 = outfitjson['piece_2']['piece_id'];
+    let piece_3 = 0;
 
-    console.log(outfitData);
+    if ('piece_3' in outfitjson) {
+        piece_3 = outfitjson['piece_3']['piece_id'];
+    }
 
-    $.post('/ootd', outfitData, flashWorn);
+    let outfitData = { 
+        "piece_1" : piece_1,
+        "piece_2" : piece_2, 
+        "piece_3" : piece_3,
+        };
+
+    $.post("/ootd", outfitData, flashWorn);
 };
 
 

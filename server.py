@@ -246,7 +246,7 @@ def show_uploads():
 def process_form():
 
     # gets data from piece form
-    u_id = current_user.u_id
+    user_id = current_user.user_id
     clothing_type = request.form.get("clothing_type")
     img_url = request.form.get("img_url")
     categories = request.form.getlist("category")
@@ -261,7 +261,7 @@ def process_form():
     new_piece = Piece(times_worn=0, 
                       desc=desc, 
                       clothing_type=clothing_type,
-                      u_id=u_id,
+                      user_id=user_id,
                       img_url=img_url,
                       cost=cost,
                       cost_per_use=cost)
@@ -350,14 +350,17 @@ def see_todays_outfit():
 @login_required
 def process_outfit():
 
-    u_id = current_user.u_id
+    user_id = current_user.user_id
     piece_1 = request.form.get("piece_1")
     piece_2 = request.form.get("piece_2")
     piece_3 = request.form.get("piece_3")
 
-    outfit_list = [piece_1, piece_2, piece_3]
+    if piece_3 == 0:
+        outfit_list = [piece_1, piece_2]
+    else:
+        outfit_list = [piece_1, piece_2, piece_3]
 
-    new_outfit = Outfit(u_id=u_id)
+    new_outfit = Outfit(user_id=user_id)
     db.session.add(new_outfit)
     db.session.commit()
 
@@ -372,7 +375,7 @@ def process_outfit():
 
     print("\nIT'S HAPPENING!\n")
 
-    return u_id
+    return "NOTED AS WORN!"
 
 ################ helper function for clarifai ####################
 
