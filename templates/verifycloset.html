@@ -39,6 +39,7 @@
                 <input type="checkbox" name="category" value="party" class="category-field"/>
                 <label for="party">Party</label>
             <br>
+            <label>Cost:</label> <input type="text" name="cost" class="cost-field">
             <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
             <input type="hidden" value="{{ piece['piece_url'] }}" name="img_url">
             <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>

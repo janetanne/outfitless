@@ -38,3 +38,24 @@ def get_concepts(_dict):
         counter +=1
 
     return piece_data
+
+
+def change_piece_to_dict(item):
+    """Takes in list of piece objects and returns a dictionary."""
+
+    piece_dict = {}
+
+    piece_dict['piece_id'] = item.piece_id
+    piece_dict['img_url'] = item.img_url
+    piece_dict['clothing_type'] = item.clothing_type
+
+    return piece_dict
+
+
+
+
+
+
+
+
+

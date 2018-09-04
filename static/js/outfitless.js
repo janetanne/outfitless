@@ -21,5 +21,23 @@ function savePieceDetails(thing) {
         success: flashSaved(thing)
     });
 
-}
+};
+
+function flashWorn(result) {
+    console.log(result);
+};
+
+function wearOutfit(outfitjson) {
+
+    let outfitData= {
+        "piece_1": $('#piece_1').val(),
+        "piece_2": $('#piece_2').val(),
+        "piece_3": $('#piece_3').val(),
+    };
+
+    console.log(outfitData);
+
+    $.post('/ootd', outfitData, flashWorn);
+};
+
 

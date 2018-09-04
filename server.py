@@ -26,7 +26,8 @@ from jinja2 import StrictUndefined
 
 # my code
 import config
-from helper import get_google_auth, get_concepts
+from helper import get_google_auth, get_concepts, \
+                   change_piece_to_dict
 from model import User, Piece, Outfit, OutfitPiece, \
                   OutfitWear, Category, CategoryPiece, \
                   connect_to_db, db
@@ -252,6 +253,7 @@ def process_form():
     c_id = request.form.get("c_id")
     desc = request.form.get("desc")
     other_desc = request.form.get("other_desc")
+    cost = request.form.get("cost")
 
     if other_desc:
         desc = other_desc
@@ -260,7 +262,9 @@ def process_form():
                       desc=desc, 
                       clothing_type=clothing_type,
                       u_id=u_id,
-                      img_url=img_url)
+                      img_url=img_url,
+                      cost=cost,
+                      cost_per_use=cost)
 
     db.session.add(new_piece)
     db.session.commit()
@@ -280,7 +284,7 @@ def process_form():
         db.session.add(new_category_piece)
         db.session.commit()
 
-    print("\n\nPOST REQUEST IS HAPPENING\n\n")
+    print("\nPOST REQUEST IS HAPPENING\n")
 
     return c_id
 
@@ -294,7 +298,7 @@ def see_closet():
 
 ####### note: add feature that doesn't reuse outfits given a certain time
 
-@app.route('/ootd')
+@app.route('/ootd', methods=['GET'])
 @login_required
 def see_todays_outfit():
 
@@ -304,36 +308,71 @@ def see_todays_outfit():
     all_bottoms = Piece.query.filter(Piece.clothing_type == "bottom").all()
     all_jackets = Piece.query.filter(Piece.clothing_type == "jacket").all()
 
-    outfit = []
+    outfit_dict = {}
 
     piece_1 = random.choice(all_pieces)
-    ootd.append(piece_1)
+    piece_1 = change_piece_to_dict(piece_1)
+    outfit_dict['piece_1'] = piece_1
 
-    if piece_1.clothing_type == "dress":
+    if piece_1['clothing_type'] == "dress":
         piece_2 = random.choice(all_jackets)
-        ootd.append(piece_2)
+        piece_2 = change_piece_to_dict(piece_2)
+        outfit_dict['piece_2'] = piece_2
 
-    elif piece_1.clothing_type == "top":
+    elif piece_1['clothing_type'] == "top":
         piece_2 = random.choice(all_bottoms)
+        piece_2 = change_piece_to_dict(piece_2)
+        outfit_dict['piece_2'] = piece_2
         piece_3 = random.choice(all_jackets)
-        ootd.extend([piece_2, piece_3])
+        piece_3 = change_piece_to_dict(piece_3)
+        outfit_dict['piece_3'] = piece_3
 
-    elif piece_1.clothing_type == "bottom":
+    elif piece_1['clothing_type'] == "bottom":
         piece_2 = random.choice(all_tops)
+        piece_2 = change_piece_to_dict(piece_2)
+        outfit_dict['piece_2'] = piece_2
         piece_3 = random.choice(all_jackets)
-        ootd.extend([piece_2, piece_3])
-
-    elif piece_1.clothing_type == "jacket":
+        piece_3 = change_piece_to_dict(piece_3)
+        outfit_dict['piece_3'] = piece_3
+        
+    elif piece_1['clothing_type'] == "jacket":
         piece_2 = random.choice(all_tops)
+        piece_2 = change_piece_to_dict(piece_2)
+        outfit_dict['piece_2'] = piece_2
         piece_3 = random.choice(all_bottoms)
-        ootd.extend([piece_2, piece_3])
+        piece_3 = change_piece_to_dict(piece_3)
+        outfit_dict['piece_3'] = piece_3
 
-    return render_template('ootd.html', outfit=outfit)
+    return render_template('ootd.html', outfit=outfit_dict)
+
 
 @app.route('/ootd', methods=['POST'])
 @login_required
 def process_outfit():
 
+    u_id = current_user.u_id
+    piece_1 = request.form.get("piece_1")
+    piece_2 = request.form.get("piece_2")
+    piece_3 = request.form.get("piece_3")
+
+    outfit_list = [piece_1, piece_2, piece_3]
+
+    new_outfit = Outfit(u_id=u_id)
+    db.session.add(new_outfit)
+    db.session.commit()
+
+    for piece in outfit_list:
+        new_outfit_piece = OutfitPiece(outfit_id=new_outfit.outfit_id,
+                                       piece_id=piece)
+        db.session.add(new_outfit_piece)
+        db.session.commit()
+
+    new_outfit_wear = OutfitWear(date_worn=datetime.datetime.now(),
+                                 outfit_id=new_outfit.outfit_id)
+
+    print("\nIT'S HAPPENING!\n")
+
+    return u_id
 
 ################ helper function for clarifai ####################
 

@@ -7,13 +7,21 @@
 <h1>OOTD: Outfit of the Day</h1>
 
 <p>Here's your OOTD!</p>
-{% for piece in ootd %}
-<img src={{ piece.img_url }}>
+<div id="outfit">
+<img src={{ outfit['piece_1']['img_url'] }}>
+<input type="hidden" value="{{ outfit['piece_1']['piece_id'] }}" name="piece_1" id="piece_1">
 <br>
+<img src={{ outfit['piece_2']['img_url'] }}>
+<input type="hidden" value="{{ outfit['piece_2']['piece_id'] }}" name="piece_2" id="piece_2">
 <br>
-{% endfor %}
+{% if 'piece_3' in outfit %}
+<img src={{ outfit['piece_3']['img_url'] }}>
+<input type="hidden" value="{{ outfit['piece_3']['piece_id'] }}" name="piece_3" id="piece_3">
+{% endif %}
+</div>
 
-<br><br>like this outfit or nah?
-
+<br>
+<button type="button" id="btn-wear-outfit" value="wear-outfit" onclick=wearOutfit('{{ outfit|tojson }}')>I'll wear this today!</button>  <button type="button" id="btn-choose-other-outfit" value="choose-another-outfit"><a href="/ootd">Nah, choose another outfit please!</a></button>
+<br><br>
 {% endblock %}
 

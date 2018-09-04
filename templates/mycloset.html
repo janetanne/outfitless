@@ -21,6 +21,8 @@
         <br>
         <label>Times Worn:</label> {{ piece.times_worn }}
         <br>
+        <label>Current cost-per-use:</label> {{ piece.cost_per_use }}
+        <br>
         <label>Categories:</label> 
         {% for category in piece.categories %}
             {{ category.category }} •

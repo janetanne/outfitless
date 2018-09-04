@@ -37,6 +37,8 @@ class Piece(db.Model):
                         autoincrement=True, 
                         nullable=False)
     times_worn = db.Column(db.Integer, nullable=False)
+    cost = db.Column(db.Float, nullable=False)
+    cost_per_use = db.Column(db.Float, nullable=False)
     u_id = db.Column(db.Integer, db.ForeignKey(User.u_id),
                           nullable=False)
 
