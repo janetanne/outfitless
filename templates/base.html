@@ -31,7 +31,11 @@
                 </ul>
                 {% if current_user.is_authenticated %}
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="/mycloset"><img src='{{ current_user.avatar }}?sz=20' width="20" height="20" alt="{{ current_user.name }}"> {{ current_user.name }}'s Closet</a></li>
+                    <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="/mycloset" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src='{{ current_user.avatar }}?sz=20' width="20" height="20" alt="{{ current_user.name }}"> {{ current_user.name }}'s Closet</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/upload">Upload pieces</a>
+                    </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/ootd">OOTD</a>
                     </li>

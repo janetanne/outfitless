@@ -9,8 +9,14 @@
     {% if not all_pieces %}
     <div class="row">
         Nothing in here yet? <a href='/upload'>Upload</a> clothes to your closet.
-        {% endif %}
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col-3">
+            <a class="btn btn-outline-primary btn-block" href="/upload" role=button style="background-color: #c0b283";>Upload more pieces!</a></button>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
     {% for piece in all_pieces %}
         <div class="col-md-4">
