@@ -4,32 +4,33 @@
 
 {% block content %}
 
-<h3>My Closet</h3>
-
-<p>Welcome to your closet!</p>
-
-<p>Nothing in here yet? <a href='/upload'>Upload</a> clothes to your closet.</p>
-<br>
-{% for piece in all_pieces %}
-    <div class="closetpiece-data">
-    <img src={{ piece.img_url }}>
-    <br>
-    <fieldset><legend>Piece Details</legend>
-        <label>Description:</label> {{ piece.desc }}
-        <br>
-        <label>Clothing Type:</label> {{ piece.clothing_type }}
-        <br>
-        <label>Times Worn:</label> {{ piece.times_worn }}
-        <br>
-        <label>Current cost-per-use:</label> {{ piece.cost_per_use }}
-        <br>
-        <label>Categories:</label> 
-        {% for category in piece.categories %}
-            {{ category.category }} •
-            {% endfor %}
-    </fieldset>
+<div class="container-fluid">
+    <div class="row"><h3>My Closet</h3></div>
+    {% if not all_pieces %}
+    <div class="row">
+        Nothing in here yet? <a href='/upload'>Upload</a> clothes to your closet.
+        {% endif %}
     </div>
-    <br><br>
-{% endfor %}
-
+    <div class="row">
+    {% for piece in all_pieces %}
+        <div class="col-md-4">
+        <img class="img-thumbnail" src={{ piece.img_url }}>
+        <fieldset><legend><b>Piece Details</b></legend>
+            <label>DESCRIPTION:</label> {{ piece.desc }}
+            <br>
+            <label>CLOTHING TYPE:</label> {{ piece.clothing_type }}
+            <br>
+            <label>TIMES WORN:</label> {{ piece.times_worn }}
+            <br>
+            <label>CURRENT COST PER USE:</label> {{ piece.cost_per_use }}
+            <br>
+            <label>Categories:</label> 
+            {% for category in piece.categories %}
+                {{ category.category }} •
+                {% endfor %}
+        </fieldset>
+        </div>
+    {% endfor %}
+    </div>
+</div>
 {% endblock %}

@@ -22,5 +22,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .img-homepage {
     max-width: 90%;
-    heigh: auto;
+    height: auto;
+}
+
+label {
+    font-size: 1rem;
 }

@@ -87,11 +87,16 @@ def shows_homepage():
 
     return render_template('home.html')
 
+@app.route('/about')
+def shows_aboutpage():
+
+    return render_template('about.html')
+
 @app.route('/login', methods=["GET"])
 def login():
 
     if current_user.is_authenticated:
-        return redirect('/mycloset')
+        return redirect('/login')
 
     google = get_google_auth()
 
