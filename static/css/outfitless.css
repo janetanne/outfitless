@@ -33,3 +33,11 @@ label {
 button {
     font-family: 'Inconsolata', monospace;
 }
+
+.nav-link {
+    padding: unset;
+}
+
+.dropdown-menu {
+    padding: unset;
+}
