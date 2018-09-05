@@ -19,10 +19,8 @@
         </div>
         {% endif %}
     </div>
-
-<br>
-<button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today!</button>  <button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please.</a></button>
-
-<button type="button" id="btn-go-home" class="hidden"><a href="/">Back to homepage</a></button>
-<br><br>
+    <div class="row">
+        <div class="col"><button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today!</button></div>
+        <div class="col"><button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please.</a></button></div>
+        <div class="col"><button type="button" id="btn-go-home" class="hidden"><a href="/mycloset">Back to my closet!</a></button>
 {% endblock %}
