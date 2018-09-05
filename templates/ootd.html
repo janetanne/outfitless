@@ -3,24 +3,25 @@
 {% block title %}OOTD{% endblock %}
 
 {% block content %}
-
-<h1>OOTD: Outfit of the Day</h1>
-
-<p>Here's your OOTD!</p>
-<div id="outfit">
-<img src={{ outfit['piece_1']['img_url'] }}>
-<br><br>
-<img src={{ outfit['piece_2']['img_url'] }}>
-<br><br>
-{% if 'piece_3' in outfit %}
-<img src={{ outfit['piece_3']['img_url'] }}>
-{% endif %}
-</div>
+<div class="container-fluid">
+    <div class="row"><h3>OOTD</h3></div>
+    <div class="row">Here's your Outfit Of The Day!</div>
+    <div class="row">
+        <div class="col">
+            <img src={{ outfit['piece_1']['img_url'] }}>
+        </div>
+        <div class="col">
+            <img src={{ outfit['piece_2']['img_url'] }}>
+        </div>
+        {% if 'piece_3' in outfit %}
+        <div class="col">
+            <img src={{ outfit['piece_3']['img_url'] }}>
+        </div>
+        {% endif %}
+    </div>
 
 <br>
-<button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today</button>
-
-<button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please</a></button>
+<button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today!</button>  <button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please.</a></button>
 
 <button type="button" id="btn-go-home" class="hidden"><a href="/">Back to homepage</a></button>
 <br><br>
