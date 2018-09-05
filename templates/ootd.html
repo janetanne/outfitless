@@ -7,20 +7,23 @@
     <div class="row"><h3>OOTD</h3></div>
     <div class="row">Here's your Outfit Of The Day!</div>
     <div class="row">
-        <div class="col">
-            <img src={{ outfit['piece_1']['img_url'] }}>
+        <div class="col-4">
+            <img src={{ outfit['piece_1']['img_url'] }} class="img-responsive center-block">
         </div>
-        <div class="col">
-            <img src={{ outfit['piece_2']['img_url'] }}>
+        <div class="col-4">
+            <img src={{ outfit['piece_2']['img_url'] }} class="img-responsive center-block">
         </div>
         {% if 'piece_3' in outfit %}
-        <div class="col">
-            <img src={{ outfit['piece_3']['img_url'] }}>
+        <div class="col-4">
+            <img src={{ outfit['piece_3']['img_url'] }} class="img-responsive center-block">
         </div>
         {% endif %}
     </div>
     <div class="row">
-        <div class="col"><button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today!</button></div>
-        <div class="col"><button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please.</a></button></div>
-        <div class="col"><button type="button" id="btn-go-home" class="hidden"><a href="/mycloset">Back to my closet!</a></button>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+        <div class="col-2"><button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today!</button>
+        </div>
+        <div class="col-2"><button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please.</a></button>
+        <button type="button" id="btn-go-home" class="hidden"><a href="/mycloset">Back to my closet!</a></button></div>
 {% endblock %}
