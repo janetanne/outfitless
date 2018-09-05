@@ -92,6 +92,12 @@ def shows_aboutpage():
 
     return render_template('about.html')
 
+@app.route('/logout')
+@login_required
+def logs_out_user():
+    logout_user()
+    return redirect('/')
+
 @app.route('/login', methods=["GET"])
 def login():
 

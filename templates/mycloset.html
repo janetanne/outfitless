@@ -18,11 +18,11 @@
         <fieldset><legend><b>Piece Details</b></legend>
             <label>DESCRIPTION:</label> {{ piece.desc }}
             <br>
+            <label>CURRENT COST PER USE:</label> {{ "$%.2f"|format(piece.cost_per_use) }}
+            <br>
             <label>CLOTHING TYPE:</label> {{ piece.clothing_type }}
             <br>
             <label>TIMES WORN:</label> {{ piece.times_worn }}
-            <br>
-            <label>CURRENT COST PER USE:</label> {{ piece.cost_per_use }}
             <br>
             <label>CATEGORIES:</label> 
             {% for category in piece.categories %}
