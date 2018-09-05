@@ -5,3 +5,22 @@
 .visible {
     display: block;
 }
+
+body {
+    font-family: 'Inconsolata', monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+}
+
+.navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+}
+
+.img-homepage {
+    max-width: 90%;
+    heigh: auto;
+}

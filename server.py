@@ -355,7 +355,7 @@ def process_outfit():
     piece_2 = request.form.get("piece_2")
     piece_3 = request.form.get("piece_3")
 
-    if piece_3 == 0:
+    if piece_3 == "0":
         outfit_list = [piece_1, piece_2]
     else:
         outfit_list = [piece_1, piece_2, piece_3]
@@ -367,15 +367,22 @@ def process_outfit():
     for piece in outfit_list:
         new_outfit_piece = OutfitPiece(outfit_id=new_outfit.outfit_id,
                                        piece_id=piece)
+        check_piece = Piece.query.filter(Piece.piece_id==piece).first()
+        if check_piece:
+            check_piece.times_worn = (check_piece.times_worn + 1) 
+            check_piece.cost_per_use = (check_piece.cost / check_piece.times_worn)
         db.session.add(new_outfit_piece)
         db.session.commit()
 
     new_outfit_wear = OutfitWear(date_worn=datetime.datetime.now(),
                                  outfit_id=new_outfit.outfit_id)
 
+    db.session.add(new_outfit_wear)
+    db.session.commit()
+
     print("\nIT'S HAPPENING!\n")
 
-    return "NOTED AS WORN!"
+    return "Noted as worn!"
 
 ################ helper function for clarifai ####################
 
