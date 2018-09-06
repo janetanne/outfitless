@@ -26,7 +26,8 @@ function savePieceDetails(thing) {
 function flashWorn(result) {
     $("#btn-go-home").removeClass("hidden").addClass("visible");
     $("#btn-choose-other-outfit").removeClass("visible").addClass("hidden");
-    $("#btn-wear-outfit").html(result);
+    $("#btn-wear-outfit").html(result)
+    $("#btn-wear-outfit").css("background-color", "#b4dbc0");
 };
 
 function wearOutfit(outfitjson) {

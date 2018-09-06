@@ -3,13 +3,22 @@
 {% block title %}Upload your closet{% endblock %}
 
 {% block content %}
-    <h3>Upload clothes to your closet:</h3>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Upload pieces</h1>
+    <p class="lead">Upload photos of your clothes to your closet here!</p>
         <form method='POST' enctype='multipart/form-data'>
-        <input type='file' name='images' multiple>
-        <br>
-        <input type='submit' value="Upload">
+            <div class="input-group" data-toggle="tooltip" data-placement="right" title="To choose multiple photos, cmd (or ctrl) + click!">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile04" name="images" multiple>
+                    <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                </div>
+            <div class="input-group-append">
+                <button class="input-group-text" type="submit">Upload</button>
+            </div>
+            </div>
         </form>
-
-    <br><br>TIP: To select multiple photos, command + click!
+    </div>
+</div>
 
 {% endblock %}

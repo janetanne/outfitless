@@ -13,6 +13,8 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
     font-weight: 900;
+    line-height: 110%;
+    margin: 1rem 0 1rem 0;
 }
 
 .navbar-brand {
@@ -40,4 +42,25 @@ button {
 
 .dropdown-menu {
     padding: unset;
+}
+
+.dropdown-item {
+    padding: .1rem .5rem;
+}
+
+#google-button {
+    max-width: 50%;
+    width: 50%;
+}
+
+.jumbotron {
+    background-color: #f4f4f4;
+}
+
+fieldset {
+    padding: unset;
+}
+
+legend {
+    margin-bottom: unset;
 }

@@ -8,27 +8,37 @@
     <div class="row"><h3>My Closet</h3></div>
     {% if not all_pieces %}
     <div class="row">
-        Nothing in here yet? <a href='/upload'>Upload</a> clothes to your closet.
+        Nothing in here yet?
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <a class="btn btn-outline-primary btn-lg" href="/upload" role=button style="background-color: #c0b283";>Upload pieces here!</a></button>
+        </div>
     </div>
     {% else %}
     <div class="row">
         <div class="col-4">
-            <a class="btn btn-outline-primary btn-lg" href="/upload" role=button style="background-color: #c0b283";>Upload more pieces!</a></button>
+            <a class="btn btn-outline-primary btn-lg" href="/upload" role=button style="background-color: #c0b283";>Upload more pieces</a></button>
         </div>
     </div>
     {% endif %}
     <div class="row">
     {% for piece in all_pieces %}
-        <div class="col-md-4">
-        <img class="img-thumbnail" src={{ piece.img_url }}>
-        <fieldset><legend><b>Piece Details</b></legend>
+        <div class="col-4">
+        <img class="img-thumbnail mx-auto d-block" src={{ piece.img_url }}>
+        <div class="text-center">
+        <fieldset>
+            <legend><b>Piece Details</b></legend>
+        </div>
             <label>DESCRIPTION:</label> {{ piece.desc }}
             <br>
             <label>CURRENT COST PER USE:</label> {{ "$%.2f"|format(piece.cost_per_use) }}
             <br>
-            <label>CLOTHING TYPE:</label> {{ piece.clothing_type }}
+            <label>ORIGINAL COST:</label> {{ "$%.2f"|format(piece.cost) }}
             <br>
             <label>TIMES WORN:</label> {{ piece.times_worn }}
+            <br>
+            <label>CLOTHING TYPE:</label> {{ piece.clothing_type }}
             <br>
             <label>CATEGORIES:</label> 
             {% for category in piece.categories %}

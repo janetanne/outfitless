@@ -87,6 +87,11 @@ def shows_homepage():
 
     return render_template('home.html')
 
+@app.route('/test')
+def test():
+
+    return render_template('test.html')
+
 @app.route('/about')
 def shows_aboutpage():
 

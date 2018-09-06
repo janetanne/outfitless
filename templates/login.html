@@ -3,21 +3,25 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<br>
-<div class="container-fluid">
-    <h3>Login</h3>
-    <p class="text-left">Outfitless allows your to log in with your Google profile, so no need to remember any other login info.
-    <br>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Login</h1>
+            <br>
+            <p class="lead">Outfitless allows your to log in with your Google profile, so no need to remember any other login info.</p>
         <div class="row">
-            <div class="col">
-                <div class="btn white darken-4 col s10 m4">
+            <div class="col" style="text-align: center">
+            </div>
+            <div class="btn white darken-4 col s10 m4" id="google-button">
                 <a href="/authorize" style="text-transform:none">
                     <div class="left"><img width="20px" alt="Google &quot;G&quot; Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
                     </div>
                     Log in with Google
                 </a>
-                </div>
             </div>
-
+            <div class="col">
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -4,26 +4,31 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row"><h3>OOTD</h3></div>
-    <div class="row">Here's your Outfit Of The Day!</div>
+    <h3>OOTD</h3>
+    <div class="row">Here's your Outfit Of The Day!
+    </div>
     <div class="row">
         <div class="col-4">
-            <img src={{ outfit['piece_1']['img_url'] }} class="img-responsive center-block">
+            <img src={{ outfit['piece_1']['img_url'] }} class="img-thumbnail center-block">
         </div>
         <div class="col-4">
-            <img src={{ outfit['piece_2']['img_url'] }} class="img-responsive center-block">
+            <img src={{ outfit['piece_2']['img_url'] }} class="img-thumbnail center-block">
         </div>
         {% if 'piece_3' in outfit %}
         <div class="col-4">
-            <img src={{ outfit['piece_3']['img_url'] }} class="img-responsive center-block">
+            <img src={{ outfit['piece_3']['img_url'] }} class="img-thumbnail center-block">
         </div>
         {% endif %}
     </div>
     <div class="row">
-        <div class="col-2"></div>
-        <div class="col-2"></div>
-        <div class="col-2"><button type="button" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit">I'll wear this today!</button>
+        <div class="col-4"></div>
+        <div class="col-4">
+            <button type="button" class="btn btn-outline-primary btn-lg btn-block" onclick='wearOutfit({{ outfit|tojson }})' id="btn-wear-outfit" style="background-color: #c0b283">Yes, I'll wear this today!</button>
+            <a class="btn btn-outline-primary btn-lg btn-block" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible" style="background-color: #b56357" href="/ootd" role="button">Nah, choose another outfit please.</a></button>
+            <a class="hidden btn btn-outline-primary btn-lg btn-block" id="btn-go-home" style="background-color: #c0b283" href="/mycloset" role="button">Back to my closet</a></button>
         </div>
-        <div class="col-2"><button type="button" id="btn-choose-other-outfit" value="choose-another-outfit" class="visible"><a href="/ootd">Nah, choose another outfit please.</a></button>
-        <button type="button" id="btn-go-home" class="hidden"><a href="/mycloset">Back to my closet!</a></button></div>
+        <div class="col-4">
+        </div>
+    </div>
+</div>
 {% endblock %}
