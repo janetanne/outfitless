@@ -4,8 +4,7 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row"><h3>Verify your closet</h3>
-    </div>
+    <div class="row"><h3>Verify your closet</h3></div>
     <div class="row">
         <div class="col-4">
             <a class="btn btn-outline-primary btn-lg" href="/mycloset" role=button style="background-color: #c0b283";>Go to my closet</a></button>
@@ -16,51 +15,66 @@
         <div class="col-4">
         <img class="img-thumbnail mx-auto d-block" src={{ piece['piece_url'] }}>
         <br>
-        <div class="text-center">
         <fieldset>
-            <legend><b>Piece details</b></legend>
-        </div>
+            <legend>Piece details</legend>
+
             <form id="form-{{ piece['c_id'] }}" class="visible" method="post" action="/verifycloset">
-            <label>DESCRIPTION:</label> 
-                {% for concept in piece['concepts'] %}
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" name="desc" class="desc-field custom-control-input" value="{{ concept }}">{{ concept }}
-                </div>
-                {% endfor %}
-            <br>
-            <label>IF NONE OF THE ABOVE APPLY, DESCRIBE HERE:</label> <input type="text" name="other_desc" class="other-desc-field"/>
-            <br>
-            <label>CLOTHING TYPE:</label> <select name="clothing_type" class="clothing-type-field">
-                <option value="top">Top</option>
-                <option value="bottom">Bottom</option>
-                <option value="dress">Dress</option>
-                <option value="jacket">Jacket</option></select>
-            <br>
-            <label>CATEGORIES:</label>
-                <input type="checkbox" name="category" value="work" class="category-field"/>
+                <!-- <fieldset class="form-group"> -->
+                <!-- <div class="row"> -->
+                    <label>DESCRIPTION:</label>
+                    <div style="display: inline">
+                        {% for concept in piece['concepts'] %}
+                        <input class="desc-field" type="radio" name="desc" value="{{ concept }}">{{ concept }}</input>
+                        {% endfor %}
+                    </div>
+                    <!-- </div> -->
+                <!-- </div> -->
+                <!-- </fieldset> -->
+        
+    
+    <br>
+    <!-- <div class="row"> -->
+        <label>IF NONE OF THE ABOVE APPLY, DESCRIBE HERE:</label> <input type="text" name="other_desc" class="other-desc-field"/>
+    <!-- </div> -->
+    <!-- <div class="row"> -->
+        <label>CLOTHING TYPE:</label> <select name="clothing_type" class="clothing-type-field">
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="dress">Dress</option>
+            <option value="jacket">Jacket</option></select>
+    <!-- </div> -->
+    <!-- <div class="row"> -->
+        <label>CATEGORIES:</label>
+            <input type="checkbox" name="category" value="work" class="category-field"/>
                 <label for="work">Work</label>
-                <input type="checkbox" name="category" value="workout" class="category-field"/>
+            <input type="checkbox" name="category" value="workout" class="category-field"/>
                 <label for="workout">Workout</label>
-                <input type="checkbox" name="category" value="weekend" class="category-field"/><label for="weekend">Weekend</label>
-                <input type="checkbox" name="category" value="date" class="category-field"/>
+            <input type="checkbox" name="category" value="weekend" class="category-field"/>
+                <label for="weekend">Weekend</label>
+            <input type="checkbox" name="category" value="date" class="category-field"/>
                 <label for="date">Date</label>
-                <input type="checkbox" name="category" value="lounge" class="category-field"/>
+            <input type="checkbox" name="category" value="lounge" class="category-field"/>
                 <label for="lounge">Lounge</label>
-                <input type="checkbox" name="category" value="party" class="category-field"/>
+            <input type="checkbox" name="category" value="party" class="category-field"/>
                 <label for="party">Party</label>
-            <br>
-            <label>COST:</label> $<input type="text" name="cost" class="cost-field">
-            <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
-            <input type="hidden" value="{{ piece['piece_url'] }}" name="img_url">
-            <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>
-            <br>
-            </form>
-            <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
+<!--     </div>
+    <div class="row"> -->
+        <label>COST:</label> $<input type="text" name="cost" class="cost-field">
+        <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
+        <input type="hidden" value="{{ piece['piece_url'] }}" name="img_url">
+    <!-- <div class="row"> -->
+        <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>
+        <br>
+        </form>
+
+        <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
         </fieldset>
         </div>
-        <br>
     {% endfor %}
-
-    <button type="button" class="my-closet-button" value="go-to-closet"><a href="/mycloset">Go to your closet</a></button>
-
+    </div>
+    </div>  
+    <div class="row">
+        <div class="col-4">
+            <a class="btn btn-outline-primary btn-lg" href="/mycloset" role=button style="background-color: #c0b283";>Go to my closet</a></button>
+</div></div></div>
 {% endblock %}
