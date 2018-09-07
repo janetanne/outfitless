@@ -15,59 +15,44 @@
         <div class="col-4">
         <img class="img-thumbnail mx-auto d-block" src={{ piece['piece_url'] }}>
         <br>
-        <fieldset>
-            <legend>Piece details</legend>
-
+        <fieldset class="mx-auto">
+            <legend class="text-center">Piece details</legend>
+            <br>
             <form id="form-{{ piece['c_id'] }}" class="visible" method="post" action="/verifycloset">
-                <!-- <fieldset class="form-group"> -->
-                <!-- <div class="row"> -->
                     <label>DESCRIPTION:</label>
                     <div style="display: inline">
                         {% for concept in piece['concepts'] %}
-                        <input class="desc-field" type="radio" name="desc" value="{{ concept }}">{{ concept }}</input>
+                        <input type="radio" name="desc" class="desc-field" value="{{ concept }}"/> {{ concept }}
                         {% endfor %}
                     </div>
-                    <!-- </div> -->
-                <!-- </div> -->
-                <!-- </fieldset> -->
-        
-    
-    <br>
-    <!-- <div class="row"> -->
-        <label>IF NONE OF THE ABOVE APPLY, DESCRIBE HERE:</label> <input type="text" name="other_desc" class="other-desc-field"/>
-    <!-- </div> -->
-    <!-- <div class="row"> -->
-        <label>CLOTHING TYPE:</label> <select name="clothing_type" class="clothing-type-field">
-            <option value="top">Top</option>
-            <option value="bottom">Bottom</option>
-            <option value="dress">Dress</option>
-            <option value="jacket">Jacket</option></select>
-    <!-- </div> -->
-    <!-- <div class="row"> -->
-        <label>CATEGORIES:</label>
-            <input type="checkbox" name="category" value="work" class="category-field"/>
-                <label for="work">Work</label>
-            <input type="checkbox" name="category" value="workout" class="category-field"/>
-                <label for="workout">Workout</label>
-            <input type="checkbox" name="category" value="weekend" class="category-field"/>
-                <label for="weekend">Weekend</label>
-            <input type="checkbox" name="category" value="date" class="category-field"/>
-                <label for="date">Date</label>
-            <input type="checkbox" name="category" value="lounge" class="category-field"/>
-                <label for="lounge">Lounge</label>
-            <input type="checkbox" name="category" value="party" class="category-field"/>
-                <label for="party">Party</label>
-<!--     </div>
-    <div class="row"> -->
-        <label>COST:</label> $<input type="text" name="cost" class="cost-field">
-        <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
-        <input type="hidden" value="{{ piece['piece_url'] }}" name="img_url">
-    <!-- <div class="row"> -->
-        <button type="button" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" class="save-button">Save</button>
-        <br>
-        </form>
-
-        <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
+                    <br>
+                    <br>
+                    <label>IF NONE OF THE ABOVE APPLY, DESCRIBE HERE:</label> <input type="text" name="other_desc" class="other-desc-field"/>
+                    <br>
+                    <br>
+                    <label>CLOTHING TYPE:</label> <select name="clothing_type" class="clothing-type-field" style="display: inline-block">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="dress">Dress</option>
+                        <option value="jacket">Jacket</option></select>
+                    <br>
+                    <label>CATEGORIES:</label>
+                        <input type="checkbox" name="category" value="work" class="category-field"/> Work
+                        <input type="checkbox" name="category" value="workout" class="category-field"/> Workout
+                        <input type="checkbox" name="category" value="weekend" class="category-field"/> Weekend
+                        <input type="checkbox" name="category" value="date" class="category-field"/> Date
+                        <input type="checkbox" name="category" value="lounge" class="category-field"/> Lounge
+                        <input type="checkbox" name="category" value="party" class="category-field"/> Party
+                    <br>
+                    <br>
+                    <label>COST:</label> $ <input type="text" name="cost" class="cost-field" style="width: 75%">
+                    <br><br>
+                    <input type="hidden" value="{{ piece['c_id'] }}" name="c_id">
+                    <input type="hidden" value="{{ piece['piece_url'] }}" name="img_url">
+                    <button type="button" class="btn btn-outline-primary btn-lg" id="btn-{{ piece['c_id'] }}" onclick=savePieceDetails("{{ piece['c_id'] }}") value="Save" style="background-color: #b4dbc0">Save</button>
+                    <br>
+                    </form>
+                    <div id="div-{{ piece['c_id'] }}" class="hidden">Details saved!</div>
         </fieldset>
         </div>
     {% endfor %}
@@ -76,5 +61,6 @@
     <div class="row">
         <div class="col-4">
             <a class="btn btn-outline-primary btn-lg" href="/mycloset" role=button style="background-color: #c0b283";>Go to my closet</a></button>
-</div></div></div>
+        </div>
+</div>
 {% endblock %}

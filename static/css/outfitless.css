@@ -22,9 +22,8 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 900;
 }
 
-.img-homepage {
-    max-width: 90%;
-    height: auto;
+#img-homepage {
+    max-width: 80%;
 }
 
 label {
@@ -63,4 +62,22 @@ fieldset {
 
 legend {
     margin-bottom: unset;
+}
+
+input[type="radio"]:not(:checked), [type="radio"]:checked, [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    position: unset;
+    opacity: unset;
+    pointer-events: unset;
+}
+
+input[type=text]:not(.browser-default) {
+    height: 1.5rem;
+}
+
+button, input, optgroup, select, textarea {
+    font-family: unset;
+}
+
+.clothing-type-field {
+    height: 2rem;
 }
