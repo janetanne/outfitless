@@ -87,11 +87,6 @@ def shows_homepage():
 
     return render_template('home.html')
 
-@app.route('/test')
-def test():
-
-    return render_template('test.html')
-
 @app.route('/about')
 def shows_aboutpage():
 
@@ -308,7 +303,12 @@ def process_form():
 @login_required
 def see_closet():
 
-    all_pieces = Piece.query.all()
+    ### be explicit if you use filter. should be filter(Piece.user_id=current_user.user_id)
+    all_pieces = Piece.query.filter_by(user_id=current_user.user_id).all()
+
+    print(current_user.user_id)
+
+    print(all_pieces)
 
     return render_template('mycloset.html', all_pieces=all_pieces)
 
@@ -318,48 +318,54 @@ def see_closet():
 @login_required
 def see_todays_outfit():
 
-    all_pieces = Piece.query.all()
-    all_dresses = Piece.query.filter(Piece.clothing_type == "dress").all()
-    all_tops = Piece.query.filter(Piece.clothing_type == "top").all()
-    all_bottoms = Piece.query.filter(Piece.clothing_type == "bottom").all()
-    all_jackets = Piece.query.filter(Piece.clothing_type == "jacket").all()
+    all_pieces = Piece.query.filter_by(user_id=current_user.user_id).all()
 
-    outfit_dict = {}
+    if not all_pieces:
+        return redirect('/mycloset')
 
-    piece_1 = random.choice(all_pieces)
-    piece_1 = change_piece_to_dict(piece_1)
-    outfit_dict['piece_1'] = piece_1
+    else:
 
-    if piece_1['clothing_type'] == "dress":
-        piece_2 = random.choice(all_jackets)
-        piece_2 = change_piece_to_dict(piece_2)
-        outfit_dict['piece_2'] = piece_2
+        all_dresses = Piece.query.filter(Piece.clothing_type == "dress", Piece.user_id==current_user.user_id).all()
+        all_tops = Piece.query.filter(Piece.clothing_type == "top", Piece.user_id==current_user.user_id).all()
+        all_bottoms = Piece.query.filter(Piece.clothing_type == "bottom", Piece.user_id==current_user.user_id).all()
+        all_jackets = Piece.query.filter(Piece.clothing_type == "jacket", Piece.user_id==current_user.user_id).all()
 
-    elif piece_1['clothing_type'] == "top":
-        piece_2 = random.choice(all_bottoms)
-        piece_2 = change_piece_to_dict(piece_2)
-        outfit_dict['piece_2'] = piece_2
-        piece_3 = random.choice(all_jackets)
-        piece_3 = change_piece_to_dict(piece_3)
-        outfit_dict['piece_3'] = piece_3
+        outfit_dict = {}
 
-    elif piece_1['clothing_type'] == "bottom":
-        piece_2 = random.choice(all_tops)
-        piece_2 = change_piece_to_dict(piece_2)
-        outfit_dict['piece_2'] = piece_2
-        piece_3 = random.choice(all_jackets)
-        piece_3 = change_piece_to_dict(piece_3)
-        outfit_dict['piece_3'] = piece_3
-        
-    elif piece_1['clothing_type'] == "jacket":
-        piece_2 = random.choice(all_tops)
-        piece_2 = change_piece_to_dict(piece_2)
-        outfit_dict['piece_2'] = piece_2
-        piece_3 = random.choice(all_bottoms)
-        piece_3 = change_piece_to_dict(piece_3)
-        outfit_dict['piece_3'] = piece_3
+        piece_1 = random.choice(all_pieces)
+        piece_1 = change_piece_to_dict(piece_1)
+        outfit_dict['piece_1'] = piece_1
 
-    return render_template('ootd.html', outfit=outfit_dict)
+        if piece_1['clothing_type'] == "dress":
+            piece_2 = random.choice(all_jackets)
+            piece_2 = change_piece_to_dict(piece_2)
+            outfit_dict['piece_2'] = piece_2
+
+        elif piece_1['clothing_type'] == "top":
+            piece_2 = random.choice(all_bottoms)
+            piece_2 = change_piece_to_dict(piece_2)
+            outfit_dict['piece_2'] = piece_2
+            piece_3 = random.choice(all_jackets)
+            piece_3 = change_piece_to_dict(piece_3)
+            outfit_dict['piece_3'] = piece_3
+
+        elif piece_1['clothing_type'] == "bottom":
+            piece_2 = random.choice(all_tops)
+            piece_2 = change_piece_to_dict(piece_2)
+            outfit_dict['piece_2'] = piece_2
+            piece_3 = random.choice(all_jackets)
+            piece_3 = change_piece_to_dict(piece_3)
+            outfit_dict['piece_3'] = piece_3
+            
+        elif piece_1['clothing_type'] == "jacket":
+            piece_2 = random.choice(all_tops)
+            piece_2 = change_piece_to_dict(piece_2)
+            outfit_dict['piece_2'] = piece_2
+            piece_3 = random.choice(all_bottoms)
+            piece_3 = change_piece_to_dict(piece_3)
+            outfit_dict['piece_3'] = piece_3
+
+        return render_template('ootd.html', outfit=outfit_dict)
 
 
 @app.route('/ootd', methods=['POST'])
