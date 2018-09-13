@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Auth:
     CLIENT_ID = os.environ['GOOGLE_CLIENT_ID']
     CLIENT_SECRET = os.environ['GOOGLE_CLIENT_SECRET']
-    REDIRECT_URI = 'https://localhost:5000/oauth2callback'
+    REDIRECT_URI = 'https://www.outfitless.com/oauth2callback'
     AUTH_URI = os.environ['GOOGLE_AUTH_URI']
     TOKEN_URI = os.environ['GOOGLE_TOKEN_URI']
     USER_INFO = 'https://www.googleapis.com/oauth2/v1/userinfo'

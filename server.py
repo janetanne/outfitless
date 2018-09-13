@@ -55,11 +55,6 @@ app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
 app.secret_key = os.environ['APP_SECRET_KEY']
-if not app.secret_key:
-    print("\n\n\n\nSECRET KEY IS NOT THERE.\n\n\n\n")
-
-else:
-    print("\n\n\nSECRET KEY LOADED.\n\n\n")
 
 # google oauth for flask login
 app.config.from_object(config.config['dev'])
