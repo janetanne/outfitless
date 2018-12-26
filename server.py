@@ -448,4 +448,6 @@ if __name__ == '__main__':
     # NOTE: use this to generate ssl cert & key. 
     # http://werkzeug.pocoo.org/docs/0.14/serving/#loading-contexts-by-hand
 
-    app.run('0.0.0.0', ssl_context=('./ssl.cert', './ssl.key'))
+    # remove once i get a real SSL cert set up
+
+    app.run(ssl_context=('./ssl.cert', './ssl.key'))
