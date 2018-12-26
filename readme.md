@@ -21,6 +21,10 @@ Deployed via Amazon Web Services LightSail
 
 ## <a name="Features"></a>Features ✨
 
+See the app in action here:
+[![Outfitless demo](http://img.youtube.com/vi/mC_pL3Wx85U/0.jpg)](http://www.youtube.com/watch?v=mC_pL3Wx85U)
+
+
 Register & log in via Google.
 
 ![Login](/outfitless/static/images/_readme-images/login.png)
@@ -50,22 +54,21 @@ Check out all pieces uploaded to closet, and their details.
 
 To run this app on your local computer, please follow the below steps:
 
-Clone repository:
+Clone repository.
 ```
 $ git clone https://github.com/janetanne/outfitless.git
 ```
-Create a virtual environment:
+Create and activate a virtual environment.
 ```
 $ virtualenv env
-```
-Activate the virtual environment:
-```
 $ source env/bin/activate
 ```
+
 Install the dependencies:
 ```
 $ pip install -r requirements.txt
 ```
+
 Sign up to use the [Google OAuth API](https://developers.google.com/identity/protocols/OAuth2) and [Clarifai API](https://clarifai.com/developer). Obtain your secret keys 🔑, then save them to <kbd>secrets.sh</kbd>. The file should look like this:
 ```
 export APP_SECRET_KEY="insert"
@@ -79,8 +82,10 @@ export GOOGLE_TOKEN_URI="https://www.googleapis.com/oauth2/v3/token"
 export GOOGLE_AUTH_PROVIDER="https://www.googleapis.com/oauth2/v1/certs"
 export GOOGLE_CLIENT_SECRET="linksaboveshouldworkthough"
 ```
-Source your keys from <kbd>secrets.sh</kbd> into your virtual environment:
-```source secrets.sh
+
+Source your keys from <kbd>secrets.sh</kbd> into your virtual environment.
+```
+$ source secrets.sh
 ```
 
 Set up your database.
@@ -96,12 +101,24 @@ $ python server.py
 
 Navigate to 'localhost:5000/' to access Outfitless.
 
-##<a name="future"></a>Future Features 🔮
+## <a name="future"></a>Future Features 🔮
 - Data visualization of user's closets
 - Reminders to wear, donate, or sell clothes not worn in a certain period of time
 - Upload photos to Google Photos
 
-##<a name="about"></a>About the Developer 👩🏻‍💻
-This was created by Janet Anne Panen for her final project at Hackbright Academy, an engineering school for women. She's located in San Francisco, and you can contact her via [Twitter](https://www.twitter.com/janetanne), [LinkedIn](https://www.linkedin.com/in/janetanne), or email janetpanen at gmail dot com.
+## <a name="about"></a>About the Developer 👩🏻‍💻
+This was created by Janet Anne Panen for her final project at [Hackbright Academy](https://www.hackbrightacademy.com), an engineering school for women.
 
-This project was inspired by the annoyance of choosing what to wear, and the 90s classic, Clueless (hence the name OutfitLESS!)
+She's located in San Francisco, and you can contact her via [Twitter](https://www.twitter.com/janetanne), [LinkedIn](https://www.linkedin.com/in/janetanne), or email 📧 janetpanen at gmail dot com.
+
+This project was inspired by the annoyance of choosing what to wear every day, and the 90s classic film, *Clueless* (hence the name Outfitless 😉).
+
+## <a name="license"></a>
+The MIT License (MIT)
+Copyright (c) 2016 Agne Klimaite
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
