@@ -24,26 +24,26 @@ Deployed via Amazon Web Services LightSail
 
 ## <a name="Features"></a>Features ✨
 
-See the app in action here:
+See the app in action here:<br>
 [![Outfitless demo](http://img.youtube.com/vi/mC_pL3Wx85U/0.jpg)](http://www.youtube.com/watch?v=mC_pL3Wx85U)
 
-Register & log in via Google.<br>
+Register & log in via Google.<br><br>
 ![Login](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/login.png)
 
-Upload multiple files at once.<br>
+Upload multiple files at once.<br><br>
 ![Upload](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/upload.png)
 
-Verify suggested piece details, or write in your own description.<br>
+Verify suggested piece details, or write in your own description.<br><br>
 ![Verify](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/verifydetails.png)
 ![Verify2](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/verifydetails2.png)
 
-Choose an outfit with OOTD feature!<br>
-![OOTD](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/OOTD.png)
+Choose an outfit with OOTD feature!<br><br>
+![OOTD](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/ootd.png)
 
-Check out all pieces uploaded to closet, and their details.<br>
+Check out all pieces uploaded to closet, and their details.<br><br>
 ![Closet](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/closet.png)
 
-**Please note that although the site is live, these features will only work if you install the app locally. Everything past log-in has been disabled from the site.**
+*Please note that although the site is live, these features will only work if you install the app locally. Everything past log-in has been disabled from the site.*
 
 ## <a name="installation"></a>Setup/installation 🛠
 
@@ -114,7 +114,7 @@ She's located in San Francisco, and you can contact her via [Twitter](https://ww
 
 This project was inspired by the annoyance of choosing what to wear every day, and the 90s classic film, *Clueless* (hence the name Outfitless 😉).
 
-## <a name="license"></a>
+## <a name="license"></a>License 📝
 The MIT License (MIT)
 Copyright (c) 2016 Agne Klimaite
 
