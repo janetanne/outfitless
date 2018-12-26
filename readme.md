@@ -9,12 +9,15 @@ Inspired by the trend towards zero waste, capsule wardrobes, and Mari Kondo of �
 * [Features](#features)
 * [Setup/Installation](#installation)
 * [Future Features](#future)
-* [About the Developer](#about)]
+* [About the Developer](#about)
 * [License](#license)
 
 ## <a name="tech-stack"></a>Tech Stack 💻
+
 __Frontend:__ HTML5, CSS, Javascript, jQuery, Bootstrap
+<br>
 __Backend:__ Python, SQL, Flask, PostgresQL, SQLAlchemy
+<br>
 __APIs:__ Google OAuth 2.0, Clarifai
 
 Deployed via Amazon Web Services LightSail
@@ -22,29 +25,27 @@ Deployed via Amazon Web Services LightSail
 ## <a name="Features"></a>Features ✨
 
 See the app in action here:
+[![Outfitless demo](http://img.youtube.com/vi/mC_pL3Wx85U/0.jpg)](http://www.youtube.com/watch?v=mC_pL3Wx85U)
 
-![Outfitless demo](http://img.youtube.com/vi/mC_pL3Wx85U/0.jpg)](http://www.youtube.com/watch?v=mC_pL3Wx85U)
+Register & log in via Google.<br>
+![Login](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/login.png)
 
+Upload multiple files at once.<br>
+![Upload](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/upload.png)
 
-Register & log in via Google.
-![Login](/outfitless/static/images/_readme-images/login.png)
+Verify suggested piece details, or write in your own description.<br>
+![Verify](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/verifydetails.png)
+![Verify2](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/verifydetails2.png)
 
-Upload multiple files at once.
-![Upload](/outfitless/static/images/_readme-images/upload.png)
+Choose an outfit with OOTD feature!<br>
+![OOTD](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/OOTD.png)
 
-Verify suggested piece details, or write in your own description.
-![Verify](/outfitless/static/images/_readme-images/verifydetails.png)
-![Verify2](/outfitless/static/images/_readme-images/verifydetails2.png)
+Check out all pieces uploaded to closet, and their details.<br>
+![Closet](https://github.com/janetanne/outfitless/blob/master/static/images/_readme-images/closet.png)
 
-Choose an outfit with OOTD feature!
-![OOTD](/outfitless/static/images/_readme-images/OOTD.png)
+**Please note that although the site is live, these features will only work if you install the app locally. Everything past log-in has been disabled from the site.**
 
-Check out all pieces uploaded to closet, and their details.
-![Closet](/outfitless/static/images/_readme-images/closet.png)
-
-** Please note that although the site is live, these features will only work if you install the app locally. Everything past log-in has been disabled from the site. **
-
-##<a name="installation"></a>Setup/installation 🛠
+## <a name="installation"></a>Setup/installation 🛠
 
 #### Requirements:
 - Python 3+
