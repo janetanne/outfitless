@@ -22,11 +22,11 @@ Deployed via Amazon Web Services LightSail
 ## <a name="Features"></a>Features ✨
 
 See the app in action here:
-[![Outfitless demo](http://img.youtube.com/vi/mC_pL3Wx85U/0.jpg)](http://www.youtube.com/watch?v=mC_pL3Wx85U)
+
+![Outfitless demo](http://img.youtube.com/vi/mC_pL3Wx85U/0.jpg)](http://www.youtube.com/watch?v=mC_pL3Wx85U)
 
 
 Register & log in via Google.
-
 ![Login](/outfitless/static/images/_readme-images/login.png)
 
 Upload multiple files at once.
