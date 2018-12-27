@@ -20,10 +20,10 @@ def get_google_auth(state=None, token=None):
                           scope=Auth.SCOPES)
     return oauth
 
-# to get the first three concepts in the JSON:
+# to get the first three concepts in the JSON from Clarifai:
 
 def get_concepts(_dict):
-    """Takes in dictionary (or JSON) and returns a list with 
+    """Takes in dictionary (or JSON) and returns a list with
     the first three concepts for an item."""
     counter = 0
     piece_data = {}
@@ -50,12 +50,3 @@ def change_piece_to_dict(item):
     piece_dict['clothing_type'] = item.clothing_type
 
     return piece_dict
-
-
-
-
-
-
-
-
-

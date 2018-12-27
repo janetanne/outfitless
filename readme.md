@@ -52,8 +52,9 @@ Check out all pieces uploaded to closet, and their details.<br><br>
 - PostgresQL
 - Google OAuth 2.0 keys 🔑
 - Clarifai API keys 🔑
+- SSL certificate & key 🔖🔑
 
-To run this app on your local computer, please follow the below steps:
+__To run this app on your local computer, please follow the below steps:__
 
 Clone repository.
 ```
@@ -89,9 +90,11 @@ Source your keys from <kbd>secrets.sh</kbd> into your virtual environment.
 $ source secrets.sh
 ```
 
+Note that you'll also need to procure an SSL certificate if you want to deploy since Google OAuth 2.0 requires HTTPS. You can learn more about that and obtain your own SSL cert for free on [Let's Encrypt](https://letsencrypt.org/).
+
 Set up your database.
 ```
-$ createdb outfitless
+$ createdb outfitless_db
 $ python model.py
 ```
 
@@ -103,7 +106,8 @@ $ python server.py
 Navigate to 'localhost:5000/' to access Outfitless.
 
 ## <a name="future"></a>Future Features 🔮
-- Data visualization of user's closets
+- Generate proper SSL certificate
+- Data visualization of user's closets, using Chart.js
 - Reminders to wear, donate, or sell clothes not worn in a certain period of time
 - Upload photos to Google Photos
 

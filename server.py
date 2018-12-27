@@ -66,13 +66,15 @@ login_manager.session_protection = "strong"
 CLIENT_SECRETS_FILE = 'google_oauth_client_secret.json'
 SCOPES = ['https://www.googleapis.com/auth/photoslibrary.appendonly',
           'https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata',
-          'https://www.googleapis.com/auth/userinfo.email', 
+          'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile']
 
 # for uploads #
 
-UPLOAD_FOLDER = './test_uploads' 
-# TODO: remember to change this at production
+# TODO: work on a better upload flow; this currently uploads all images
+# to a folder on server
+
+UPLOAD_FOLDER = './test_uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'tiff'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -101,7 +103,7 @@ def login():
 
     google = get_google_auth()
 
-    auth_url, state = google.authorization_url(config.Auth.AUTH_URI, 
+    auth_url, state = google.authorization_url(config.Auth.AUTH_URI,
                       access_type='offline')
 
     session['oauth_state'] = state
@@ -167,7 +169,7 @@ def oauth2callback():
             user_data = resp.json()
             email = user_data['email']
             user = User.query.filter_by(email=email).first()
-            
+
             if user is None:
                 user = User()
                 user.email = email
@@ -182,7 +184,7 @@ def oauth2callback():
             login_user(user)
 
             return redirect(url_for('see_closet'))
-        
+
         return 'Could not fetch your information.'
 
 @login_manager.user_loader
@@ -211,10 +213,10 @@ def upload_file():
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
+
 
         else:
-            flash('This is not a valid file, please use' + 
+            flash('This is not a valid file, please use' +
                     ' .png/.jpg/.jpeg/.tiff files only.')
 
     flash('Your photos have been uploaded!')
@@ -232,9 +234,13 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
+
 @app.route('/verifycloset', methods=['GET'])
 @login_required
 def show_uploads():
+
+    # TO DO: improve this upload flow as this currently uploads
+    # EVERYTHING in upload folder, not *just* what was uploaded
 
     upload_data = []
 
@@ -244,7 +250,7 @@ def show_uploads():
         item_concepts = get_concepts(item)
         upload_data.append(item_concepts)
 
-    return render_template('verifycloset.html', 
+    return render_template('verifycloset.html',
                             upload_data=upload_data)
 
 @app.route('/verifycloset', methods=['POST'])
@@ -263,9 +269,9 @@ def process_form():
 
     if other_desc:
         desc = other_desc
-     
-    new_piece = Piece(times_worn=0, 
-                      desc=desc, 
+
+    new_piece = Piece(times_worn=0,
+                      desc=desc,
                       clothing_type=clothing_type,
                       user_id=user_id,
                       img_url=img_url,
@@ -313,10 +319,16 @@ def see_closet():
 @login_required
 def see_todays_outfit():
 
+    # TO DO: create a better logic for OOTD. currently does hardcoded
+    # queries -
     all_pieces = Piece.query.filter_by(user_id=current_user.user_id).all()
 
     if not all_pieces:
         return redirect('/mycloset')
+
+    # TO DO: create a more scalable logic for OOTD. currently does hardcoded
+    # queries (too many if statements, doesn't account for other types of
+    # clothing if we want to add that in the future)
 
     else:
 
@@ -351,7 +363,7 @@ def see_todays_outfit():
             piece_3 = random.choice(all_jackets)
             piece_3 = change_piece_to_dict(piece_3)
             outfit_dict['piece_3'] = piece_3
-            
+
         elif piece_1['clothing_type'] == "jacket":
             piece_2 = random.choice(all_tops)
             piece_2 = change_piece_to_dict(piece_2)
@@ -386,7 +398,7 @@ def process_outfit():
                                        piece_id=piece)
         check_piece = Piece.query.filter(Piece.piece_id==piece).first()
         if check_piece:
-            check_piece.times_worn = (check_piece.times_worn + 1) 
+            check_piece.times_worn = (check_piece.times_worn + 1)
             check_piece.cost_per_use = (check_piece.cost / check_piece.times_worn)
         db.session.add(new_outfit_piece)
         db.session.commit()
@@ -396,8 +408,6 @@ def process_outfit():
 
     db.session.add(new_outfit_wear)
     db.session.commit()
-
-    print("\nIT'S HAPPENING!\n")
 
     return "Noted as worn!"
 
@@ -445,9 +455,9 @@ if __name__ == '__main__':
     # Specify a hostname and port that are set as a valid redirect URI
     # for your API project in the Google API Console.
 
-    # NOTE: use this to generate ssl cert & key. 
+    # NOTE: use this to generate ssl cert & key when NOT in production.
     # http://werkzeug.pocoo.org/docs/0.14/serving/#loading-contexts-by-hand
 
-    # remove once i get a real SSL cert set up
+    # TO DO: set up an official SSL cert 
 
     app.run(ssl_context=('./ssl.cert', './ssl.key'))
