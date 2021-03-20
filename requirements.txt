@@ -18,7 +18,7 @@ google-auth-oauthlib==0.2.0
 httplib2==0.11.3
 idna==2.7
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 jsonschema==2.6.0
 MarkupSafe==1.0
 Naked==0.1.31
